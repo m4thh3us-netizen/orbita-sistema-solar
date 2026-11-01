@@ -1,0 +1,190 @@
+/* ------------------------------------------------------------ Painel lateral */
+
+.painel-lateral {
+  position: fixed;
+  z-index: 20;
+  top: calc(var(--ocupacao-top, 88px) + 4px);
+  right: calc(var(--seguro-direita) + var(--margem));
+  bottom: var(--margem);
+  display: flex;
+  flex-direction: column;
+  width: clamp(300px, 30vw, 430px);
+  border: var(--linha);
+  border-radius: calc(var(--raio) * 2);
+  background: var(--cor-superficie);
+  backdrop-filter: var(--desfoque);
+  -webkit-backdrop-filter: var(--desfoque);
+  animation: painel-entrar-lateral var(--duracao-media) var(--easing) both;
+}
+
+.painel-lateral__rolagem {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 24px 24px 28px;
+  animation: painel-aparecer var(--duracao-media) var(--easing) both;
+}
+
+@media (max-height: 500px) {
+  .painel-lateral {
+    top: calc(var(--ocupacao-top, 64px) + 4px);
+    bottom: calc(var(--seguro-base) + 8px);
+    width: clamp(280px, 40vw, 380px);
+  }
+
+  .painel-lateral__rolagem {
+    padding: 16px 18px 20px;
+  }
+}
+
+@keyframes painel-entrar-lateral {
+  from {
+    opacity: 0;
+    transform: translateX(var(--deslocamento));
+  }
+}
+
+@keyframes painel-aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--deslocamento) * 0.5));
+  }
+}
+
+/* ------------------------------------------------------------ Bottom sheet */
+
+.sheet {
+  position: fixed;
+  z-index: 20;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 var(--seguro-direita) var(--seguro-base) var(--seguro-esquerda);
+  border: var(--linha);
+  border-bottom: 0;
+  border-radius: 14px 14px 0 0;
+  background: var(--cor-superficie-forte);
+  backdrop-filter: var(--desfoque);
+  -webkit-backdrop-filter: var(--desfoque);
+  transition: height var(--duracao-media) var(--easing);
+  animation: sheet-entrar var(--duracao-media) var(--easing) both;
+}
+
+.sheet--arrastando {
+  transition: none;
+}
+
+@keyframes sheet-entrar {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--deslocamento) * 3));
+  }
+}
+
+.sheet__topo {
+  position: relative;
+  flex: none;
+}
+
+.sheet__alca {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  background: none;
+  touch-action: none;
+  cursor: grab;
+}
+
+.sheet--arrastando .sheet__alca {
+  cursor: grabbing;
+}
+
+.sheet__alca-barra {
+  width: 44px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--cor-linha-forte);
+  transition: background-color var(--duracao-curta) var(--easing);
+}
+
+.sheet__alca:hover .sheet__alca-barra,
+.sheet__alca:focus-visible .sheet__alca-barra {
+  background: var(--cor-acento);
+}
+
+.sheet__alca:focus-visible {
+  outline-offset: -4px;
+}
+
+.sheet__fechar {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+}
+
+/* Celular: controles da cena e a alça dividem a primeira linha do sheet. */
+.sheet__topo--controles {
+  display: grid;
+  grid-template-columns: auto minmax(64px, 1fr) auto;
+  align-items: center;
+  padding: 6px 8px 0;
+}
+
+.sheet__topo--controles .sheet__alca {
+  height: var(--alvo-toque);
+}
+
+.sheet__topo--controles .sheet__fechar {
+  position: static;
+}
+
+.sheet .controles {
+  padding: 0;
+  border: 0;
+  background: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.sheet .controles__mais {
+  left: 0;
+  transform: none;
+}
+
+.sheet .sheet__nota {
+  display: block;
+  margin: 0 20px 4px;
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  text-align: left;
+}
+
+.sheet .sheet__nota .rodape__creditos {
+  margin-left: 8px;
+}
+
+.sheet__conteudo {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 6px 20px 24px;
+  animation: painel-aparecer var(--duracao-media) var(--easing) both;
+}
+
+.sheet[data-estado='recolhido'] .sheet__conteudo {
+  overflow: hidden;
+}
+
+/* No sheet o nome vem primeiro, para aparecer mesmo recolhido. */
+.sheet .astro__voltar {
+  order: 4;
+}

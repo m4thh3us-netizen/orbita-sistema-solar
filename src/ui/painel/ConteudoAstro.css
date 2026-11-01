@@ -1,0 +1,378 @@
+/* Conteúdo científico de um astro (painel, sheet e fallback). */
+
+.astro {
+  --_cor-astro: var(--cor-astro, var(--cor-acento));
+}
+
+.astro__cabecalho {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding-bottom: 20px;
+  border-bottom: var(--linha);
+  position: relative;
+}
+
+.astro__cabecalho::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 56px;
+  height: 1px;
+  background: var(--cor-acento);
+}
+
+.astro__voltar {
+  order: 0;
+  margin: -8px 0 4px;
+}
+
+.astro__tipo {
+  order: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--cor-texto-2);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.astro__ponto {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--_cor-astro);
+  box-shadow: 0 0 12px var(--_cor-astro);
+}
+
+.astro__nome {
+  order: 2;
+  font-size: clamp(40px, 4.4vw, 64px);
+  font-weight: 560;
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+  overflow-wrap: anywhere;
+}
+
+.astro__nome:focus-visible {
+  outline-offset: 6px;
+}
+
+.astro__classificacao {
+  order: 3;
+  color: var(--cor-texto-2);
+  font-size: 15px;
+}
+
+.astro__selo {
+  order: 5;
+  margin-top: 4px;
+}
+
+.astro__descricao {
+  order: 6;
+  margin-top: 10px;
+  font-size: 15.5px;
+  line-height: 1.6;
+  max-width: 62ch;
+}
+
+.sheet .astro__nome {
+  font-size: clamp(32px, 9vw, 44px);
+}
+
+/* Abas */
+
+.abas__lista {
+  display: flex;
+  gap: 4px;
+  margin: 0 -4px;
+  padding: 16px 28px 0 4px;
+  /* Esmaece a borda direita: indica que há mais abas ao rolar. */
+  mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent);
+  overflow-x: auto;
+  scrollbar-width: none;
+  border-bottom: var(--linha);
+}
+
+.abas__lista::-webkit-scrollbar {
+  display: none;
+}
+
+.abas__aba {
+  flex: none;
+  min-height: var(--alvo-toque);
+  padding: 0 10px;
+  border: 0;
+  background: none;
+  color: var(--cor-texto-2);
+  font-family: var(--fonte-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition:
+    color var(--duracao-curta) var(--easing),
+    box-shadow var(--duracao-curta) var(--easing);
+}
+
+.abas__aba:hover {
+  color: var(--cor-texto);
+}
+
+.abas__aba[aria-selected='true'] {
+  color: var(--cor-texto);
+  box-shadow: inset 0 -2px 0 var(--cor-acento);
+}
+
+.abas__aba:focus-visible {
+  outline-offset: -2px;
+}
+
+.abas__painel {
+  padding-top: 20px;
+}
+
+.abas__painel:not([hidden]) {
+  animation: painel-aparecer var(--duracao-media) var(--easing) both;
+}
+
+.abas__painel:focus-visible {
+  outline-offset: 4px;
+}
+
+.secao {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.secao__texto {
+  line-height: 1.65;
+}
+
+.secao__itens {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0;
+  list-style: none;
+}
+
+.secao__itens li {
+  position: relative;
+  padding-left: 22px;
+  line-height: 1.55;
+}
+
+.secao__itens li::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 0.72em;
+  width: 10px;
+  height: 1px;
+  background: var(--cor-acento);
+}
+
+/* Dados: lista de definição em formato de ficha técnica */
+
+.dados {
+  display: flex;
+  flex-direction: column;
+}
+
+.dado {
+  display: grid;
+  /* O valor pode quebrar linha; o rótulo nunca fica espremido abaixo de ~7em. */
+  grid-template-columns: minmax(7em, 1fr) minmax(0, max-content);
+  column-gap: 16px;
+  align-items: baseline;
+  padding: 11px 0;
+  border-bottom: var(--linha);
+}
+
+.dado:first-child {
+  border-top: var(--linha);
+}
+
+.dado__rotulo {
+  color: var(--cor-texto-2);
+  font-size: 13.5px;
+}
+
+.dado__valor {
+  font-size: 13.5px;
+  text-align: right;
+  text-wrap: balance;
+}
+
+.dado__ref {
+  margin-left: 3px;
+  color: var(--cor-texto-2);
+  font-size: 9.5px;
+}
+
+.dado__nota {
+  grid-column: 1 / -1;
+  margin-top: 4px;
+  color: var(--cor-texto-2);
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+
+@media (max-width: 380px) {
+  .dado {
+    grid-template-columns: 1fr;
+  }
+
+  .dado__valor {
+    text-align: left;
+    white-space: normal;
+  }
+}
+
+/* Luas */
+
+.luas {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.luas__resumo {
+  line-height: 1.6;
+}
+
+.luas__resumo strong {
+  font-weight: 500;
+  color: var(--cor-acento);
+}
+
+.luas__data,
+.luas__fonte {
+  color: var(--cor-texto-2);
+}
+
+.luas__fonte {
+  font-size: 11.5px;
+}
+
+.luas__fonte a {
+  text-underline-offset: 3px;
+}
+
+.luas__lista {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: var(--linha);
+}
+
+.luas__item {
+  display: grid;
+  grid-template-columns: 8px minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 12px;
+  min-height: 52px;
+  padding: 6px 4px;
+  border-bottom: var(--linha);
+  text-decoration: none;
+  transition: background-color var(--duracao-curta) var(--easing);
+}
+
+.luas__item:hover {
+  background: rgb(232 230 225 / 0.05);
+}
+
+.luas__ponto {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cor-item);
+}
+
+.luas__nome {
+  font-size: 16px;
+}
+
+.luas__classe {
+  color: var(--cor-texto-2);
+  font-size: 11px;
+  text-align: right;
+}
+
+.luas__vazio {
+  color: var(--cor-texto-2);
+  line-height: 1.6;
+}
+
+/* Rodapé com fontes */
+
+.astro__rodape {
+  margin-top: 28px;
+  padding-top: 18px;
+  border-top: var(--linha);
+}
+
+.astro__rotulo {
+  margin-bottom: 10px;
+  color: var(--cor-texto-2);
+  font-size: 10.5px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.fontes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding-left: 22px;
+  font-size: 13px;
+}
+
+.fontes li::marker {
+  color: var(--cor-texto-2);
+  font-family: var(--fonte-mono);
+  font-size: 11px;
+}
+
+.fontes a {
+  text-decoration: underline;
+  text-decoration-color: var(--cor-linha-forte);
+  text-underline-offset: 3px;
+  transition: text-decoration-color var(--duracao-curta) var(--easing);
+}
+
+.fontes a:hover {
+  text-decoration-color: var(--cor-acento);
+}
+
+.fontes__icone {
+  display: inline;
+  width: 14px;
+  height: 14px;
+  margin-left: 2px;
+  vertical-align: -2px;
+}
+
+.fontes__acesso {
+  display: block;
+  color: var(--cor-texto-2);
+  font-size: 11px;
+}
+
+.astro__atualizado {
+  margin-top: 16px;
+  color: var(--cor-texto-2);
+  font-size: 11px;
+}

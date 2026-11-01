@@ -1,0 +1,114 @@
+/*
+ * Tokens visuais do Órbita (contrato compartilhado).
+ * --cor-acento é atualizada pela interface conforme o astro selecionado; registrada com
+ * @property para a troca de cor ter transição suave.
+ */
+@property --cor-acento {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #f2b45a;
+}
+
+:root {
+  --cor-fundo: #05060a;
+  --cor-texto: #e8e6e1;
+  /* Secundária: 7,5:1 sobre o fundo. */
+  --cor-texto-2: #a19f9a;
+  --cor-acento: #f2b45a;
+  --cor-acento-suave: color-mix(in srgb, var(--cor-acento) 16%, transparent);
+
+  /* Superfícies translúcidas para painéis periféricos. */
+  --cor-superficie: rgb(8 9 15 / 0.66);
+  --cor-superficie-forte: rgb(8 9 15 / 0.88);
+  --cor-linha: rgb(232 230 225 / 0.14);
+  --cor-linha-forte: rgb(232 230 225 / 0.28);
+  /* Borda completa de 1px; para só a cor, use --cor-linha. */
+  --linha: 1px solid var(--cor-linha);
+
+  --fonte-display:
+    'Bricolage Grotesque Variable', 'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif;
+  --fonte-mono:
+    'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas,
+    monospace;
+
+  --raio: 4px;
+  --duracao-curta: 160ms;
+  --duracao-media: 420ms;
+  --easing: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Deslocamento das entradas (fade + deslize curto); zero com movimento reduzido. */
+  --deslocamento: 14px;
+
+  --margem: clamp(16px, 2.2vw, 32px);
+  --alvo-toque: 44px;
+  --desfoque: blur(16px) saturate(130%);
+
+  --seguro-topo: env(safe-area-inset-top, 0px);
+  --seguro-direita: env(safe-area-inset-right, 0px);
+  --seguro-base: env(safe-area-inset-bottom, 0px);
+  --seguro-esquerda: env(safe-area-inset-left, 0px);
+
+  transition: --cor-acento var(--duracao-media) var(--easing);
+}
+
+/* Movimento reduzido: sem deslizes, só fades curtos. */
+:root[data-movimento-reduzido='true'] {
+  --duracao-media: 140ms;
+  --deslocamento: 0px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duracao-media: 140ms;
+    --deslocamento: 0px;
+  }
+}
+
+/*
+ * Rótulos HTML dos astros dentro da cena. A cena define data-tipo e --cor-acento-astro.
+ */
+.rotulo-astro {
+  --_cor: var(--cor-acento-astro, var(--cor-acento));
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 6px;
+  font-family: var(--fonte-mono);
+  font-size: 11px;
+  font-weight: 450;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--cor-texto-2);
+  text-shadow:
+    0 0 8px var(--cor-fundo),
+    0 0 2px var(--cor-fundo);
+  cursor: pointer;
+  user-select: none;
+  transition:
+    color var(--duracao-curta) var(--easing),
+    opacity var(--duracao-curta) var(--easing);
+}
+
+.rotulo-astro::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--_cor);
+  opacity: 0.85;
+}
+
+.rotulo-astro[data-tipo='lua'] {
+  font-size: 10px;
+}
+
+.rotulo-astro[data-tipo='lua']::before {
+  width: 4px;
+  height: 4px;
+}
+
+.rotulo-astro--hover {
+  color: var(--cor-texto);
+  box-shadow: inset 0 -1px 0 var(--_cor);
+}
