@@ -75,7 +75,6 @@ svg {
   color: var(--cor-fundo);
 }
 
-/* Foco sempre visível, na cor de acento. */
 :focus-visible {
   outline: 2px solid var(--cor-acento);
   outline-offset: 2px;
@@ -102,7 +101,6 @@ svg {
   font-feature-settings: 'zero' 0;
 }
 
-/* Pular para o conteúdo */
 .pular {
   position: fixed;
   z-index: 1000;
@@ -122,8 +120,6 @@ svg {
 .pular:focus {
   transform: none;
 }
-
-/* ------------------------------------------------------------------ Botões */
 
 .botao {
   display: inline-flex;
@@ -186,7 +182,6 @@ svg {
   border-color: var(--cor-linha);
 }
 
-/* Link-texto com seta, ex.: "← Voltar a Saturno" */
 .botao-texto {
   display: inline-flex;
   align-items: center;
@@ -213,7 +208,6 @@ svg {
   height: 16px;
 }
 
-/* Dica em hover/foco para botões só com ícone (complementa o aria-label). */
 [data-dica] {
   position: relative;
 }
@@ -267,7 +261,6 @@ svg {
   }
 }
 
-/* Selo, ex.: "Representação artística" */
 .selo {
   display: inline-flex;
   align-items: center;
@@ -282,7 +275,6 @@ svg {
   text-transform: uppercase;
 }
 
-/* Radiogroup segmentado (velocidade, filtros) */
 .segmentos {
   display: inline-flex;
   flex-wrap: wrap;
@@ -316,13 +308,11 @@ svg {
   color: var(--cor-texto);
 }
 
-/* Barras de rolagem discretas */
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--cor-linha-forte) transparent;
 }
 
-/* Trecho encontrado na busca */
 .destaque {
   background: var(--cor-acento-suave);
   color: var(--cor-texto);

@@ -4,7 +4,6 @@ import { hashParaRota, iniciarSincronizacaoURL, rotaParaHash } from '../url';
 
 vi.mock('@/data', () => import('./fixture'));
 
-/** Janela mínima e síncrona: location.hash, history e eventos. */
 class JanelaFalsa extends EventTarget {
   location = { hash: '' };
   historico: string[] = [''];
@@ -20,7 +19,6 @@ class JanelaFalsa extends EventTarget {
     }),
   };
 
-  /** Simula voltar/avançar ou edição manual da URL. */
   navegar(hash: string) {
     this.location.hash = hash;
     this.dispatchEvent(new Event('popstate'));
@@ -64,9 +62,9 @@ describe('hashParaRota', () => {
   it.each([
     '#/xyz',
     '#/saturno/xyz',
-    '#/marte/tita', // lua com o pai errado
-    '#/mercurio/luas', // sem luas exploráveis
-    '#/saturno/pan', // não explorável em 3D
+    '#/marte/tita',
+    '#/mercurio/luas',
+    '#/saturno/pan',
     '#/saturno/tita/extra',
     '#/%E0%A4%A',
   ])('%s é inválido e volta para a visão geral', (hash) => {
@@ -123,9 +121,9 @@ describe('sincronização com a URL', () => {
     useOrbita.getState().selecionar('saturno');
     j.history.pushState.mockClear();
 
-    j.navegar('#/marte'); // voltar
+    j.navegar('#/marte');
     expect(useOrbita.getState()).toMatchObject({ selecionado: 'marte', modo: 'astro' });
-    j.navegar('#/'); // voltar de novo
+    j.navegar('#/');
     expect(useOrbita.getState()).toMatchObject({ selecionado: null, modo: 'visao-geral' });
     expect(j.history.pushState).not.toHaveBeenCalled();
     parar();

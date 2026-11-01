@@ -6,12 +6,10 @@ import {
 } from './construtores.ts';
 import { KM_POR_UA } from './formatar.ts';
 
-// Elementos orbitais osculantes do JPL SBDB (época JD 2461200,5).
 const A_UA = 67.93394688;
-const RAIO = 1163; // Sicardy et al. (2011), ocultação estelar
-const MASSA = 1.66e22; // Brown & Schaller (2007), pela órbita de Disnomia
+const RAIO = 1163;
+const MASSA = 1.66e22;
 const G = 6.6743e-11;
-// Rotação síncrona com a órbita de Disnomia (15,78590 dias).
 const ROTACAO_HORAS = 15.7859 * 24;
 
 const luasEris = luas(1, 'nasa-eris');
@@ -24,7 +22,6 @@ export const eris = {
   ordem: 13,
   exploravel3D: true,
 
-  // Obliquidade desconhecida: 0 é convenção de renderização, não um dado (ver docs/dados.md).
   fisico: { raioMedioKm: RAIO, inclinacaoAxialGraus: 0, periodoRotacaoHoras: ROTACAO_HORAS },
   orbita: { semiEixoMaiorKm: A_UA * KM_POR_UA, periodoOrbitalDias: 204_516.663, inclinacaoGraus: 43.926, excentricidade: 0.4382 },
 

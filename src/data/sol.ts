@@ -13,8 +13,8 @@ export const sol = {
 
   fisico: {
     raioMedioKm: 695_700,
-    inclinacaoAxialGraus: 7.25, // em relação à eclíptica
-    periodoRotacaoHoras: 609.12, // período sideral adotado, a 16° de latitude
+    inclinacaoAxialGraus: 7.25,
+    periodoRotacaoHoras: 609.12,
   },
   orbita: null,
 
@@ -22,7 +22,7 @@ export const sol = {
     corBase: '#FFDF9E',
     corAcento: '#FFB938',
     texturas: texturas('sol', 'mapa'),
-    atmosfera: { cor: '#FFB347', intensidade: 0.8 }, // brilho da coroa
+    atmosfera: { cor: '#FFB347', intensidade: 0.8 },
     representacaoArtistica: false,
   },
 

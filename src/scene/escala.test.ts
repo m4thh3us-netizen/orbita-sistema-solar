@@ -13,7 +13,6 @@ import {
   velocidadeRotacao,
 } from './escala';
 
-// Valores reais de referência (NASA Planetary Fact Sheet).
 const RAIO = {
   sol: 695_700,
   mercurio: 2_439.7,
@@ -41,8 +40,6 @@ const UA = {
   plutao: 39.48,
   eris: 67.86,
 };
-// Borda do anel F de Saturno: limite superior conservador (nos dados, raioExternoKm = 136.780,
-// borda do anel A). Se os vãos cabem com o anel F, cabem com o valor dos dados.
 const ANEL_F_SATURNO_KM = 140_220;
 
 const PERIODO_DIAS = {
@@ -117,7 +114,6 @@ describe('distanciaCena (heliocêntrica)', () => {
 
   it('deixa espaço entre vizinhos maior que a soma dos raios', () => {
     expect(d(UA.terra) - d(UA.venus)).toBeGreaterThan(raioCena(RAIO.terra) + raioCena(RAIO.venus) + 1);
-    // Com o anel F, os anéis de Saturno chegam a ~2,4 raios do planeta.
     const aneisSaturno = raioCena(RAIO.saturno) * (ANEL_F_SATURNO_KM / RAIO.saturno);
     expect(d(UA.saturno) - d(UA.jupiter)).toBeGreaterThan(raioCena(RAIO.jupiter) + aneisSaturno + 2);
   });
@@ -129,7 +125,7 @@ describe('distanciaCena (heliocêntrica)', () => {
 
   it('cabe numa cena navegável', () => {
     expect(d(UA.netuno)).toBeLessThan(100);
-    expect(d(97.6)).toBeLessThan(130); // afélio de Éris
+    expect(d(97.6)).toBeLessThan(130);
   });
 
   it('põe o Sol na origem', () => {
@@ -187,7 +183,6 @@ describe('velocidadeAngular', () => {
   });
 
   it('comprime os corpos externos para que não fiquem parados', () => {
-    // Netuno: proporcional seriam ~2,7 h por volta; com compressão, menos de 30 min.
     expect(periodoCena(PERIODO_DIAS.netuno)).toBeLessThan(30 * 60);
     expect(periodoCena(PERIODO_DIAS.eris)).toBeLessThan(60 * 60);
     expect(periodoCena(PERIODO_DIAS.netuno)).toBeGreaterThan(periodoCena(PERIODO_DIAS.jupiter));
@@ -224,7 +219,6 @@ describe('velocidadeRotacao', () => {
 
 describe('sentidos', () => {
   it('não aplica a retrogradação duas vezes', () => {
-    // Convenção dos dados: obliquidade > 90° já descreve a rotação retrógrada.
     expect(sentidoRotacao(177.36, -5_832.5)).toBe(1);
     expect(sentidoRotacao(97.77, -17.24)).toBe(1);
     expect(sentidoRotacao(2.64, -5_832.5)).toBe(-1);

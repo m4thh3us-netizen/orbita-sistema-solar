@@ -14,12 +14,10 @@ import './Interface.css';
 const Ajuda = lazy(() => import('./modais/Ajuda'));
 const Creditos = lazy(() => import('./modais/Creditos'));
 
-/** Camadas da interface por cima do canvas, nas bordas. */
 export function Interface() {
   const compacto = useLayoutCompacto();
   const catalogoAberto = useInterface((s) => s.catalogoAberto);
   const modal = useInterface((s) => s.modal);
-  // No celular o catálogo cobre a tela: o resto sai da ordem de Tab e da árvore de acessibilidade.
   const fundoInerte = compacto && catalogoAberto;
 
   useAtalhos();

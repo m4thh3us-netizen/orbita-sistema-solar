@@ -12,20 +12,15 @@ export const FILTROS: readonly { id: Filtro; rotulo: string }[] = [
   { id: 'lua', rotulo: 'Luas' },
 ];
 
-/** Remove acentos e caixa: "Titã" → "tita". */
 export function normalizar(texto: string): string {
   return texto.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
 }
 
 export interface Trecho {
   inicio: number;
-  fim: number; // exclusivo
+  fim: number;
 }
 
-/**
- * Procura `consulta` em `texto` ignorando acentos e caixa e devolve a posição
- * no texto ORIGINAL, para destacar exatamente as letras digitadas.
- */
 export function localizarTrecho(texto: string, consulta: string): Trecho | null {
   const alvo = normalizar(consulta.trim());
   if (!alvo) return null;
@@ -46,7 +41,6 @@ export function localizarTrecho(texto: string, consulta: string): Trecho | null 
 
   const pos = normalizado.indexOf(alvo);
   if (pos === -1) return null;
-  // Marcas combinantes (texto em NFD) somem na normalização; o destaque as inclui.
   let fim = fimOriginal[pos + alvo.length - 1];
   while (fim < texto.length && /\p{M}/u.test(texto[fim])) fim++;
   return { inicio: inicioOriginal[pos], fim };
@@ -58,7 +52,6 @@ export interface ResultadoBusca {
   trecho: Trecho | null;
 }
 
-/** Filtra por tipo e busca no nome (prioridade) e na classificação. */
 export function buscarCorpos(
   corpos: readonly CelestialBody[],
   consulta: string,
@@ -96,10 +89,6 @@ const TITULOS_TIPO: Record<Exclude<BodyType, 'lua'>, string> = {
   'planeta-anao': 'Planetas anões',
 };
 
-/**
- * Agrupa: estrela, planetas, planetas anões e luas por astro pai (na ordem dos pais).
- * `contarLuas` decide singular/plural ("Lua da Terra", "Luas de Júpiter").
- */
 export function agruparResultados(
   resultados: readonly ResultadoBusca[],
   obterCorpo: (id: string) => CelestialBody | undefined,

@@ -1,7 +1,3 @@
-/**
- * Anéis no plano equatorial (dentro do grupo já inclinado do planeta). Usa a textura dos
- * dados quando existe; se falhar ou não existir, o perfil procedural com as divisões reais.
- */
 import { useFrame } from '@react-three/fiber';
 import { Suspense, useEffect, useMemo, useRef } from 'react';
 import { Vector3, type Mesh, type ShaderMaterial, type Texture } from 'three';

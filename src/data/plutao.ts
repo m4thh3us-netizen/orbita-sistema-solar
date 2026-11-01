@@ -23,7 +23,7 @@ export const plutao = {
     corBase: '#C9A58A',
     corAcento: '#F5C98F',
     texturas: texturas('plutao', 'mapa'),
-    atmosfera: { cor: '#9FC4FF', intensidade: 0.15 }, // névoa azulada vista pela New Horizons
+    atmosfera: { cor: '#9FC4FF', intensidade: 0.15 },
     representacaoArtistica: false,
   },
 
@@ -85,8 +85,6 @@ export const plutao = {
   atualizadoEm: '2026-10-31',
 } satisfies CelestialBody;
 
-// Caronte — raio e GM: JPL SSD (phys_par); órbita: JPL SSD (elementos médios, plano equatorial de Plutão).
-// Rotação positiva: no mesmo sentido da rotação de Plutão (ver convenção em types.ts).
 const GM_CARONTE = 106.1;
 const RAIO_CARONTE = 606.0;
 

@@ -1,9 +1,3 @@
-/**
- * Enquadramento com a interface por cima do canvas. `ocupacaoInterface` diz quantos px
- * cada borda tem coberta por painéis; a câmera desloca a projeção (setViewOffset) para
- * que o centro da área livre vire o centro óptico, e escolhe a distância para que o astro
- * caiba nessa área. Funções puras, sem three.
- */
 export interface Ocupacao {
   top: number;
   right: number;
@@ -11,7 +5,6 @@ export interface Ocupacao {
   left: number;
 }
 
-/** A área livre nunca fica menor que esta fração da tela, mesmo com painéis enormes. */
 const FRACAO_LIVRE_MINIMA = 0.3;
 
 function limitarPar(a: number, b: number, total: number): [number, number] {
@@ -35,16 +28,11 @@ export function areaLivre(o: Ocupacao, largura: number, altura: number): { largu
   return { largura: largura - s.left - s.right, altura: altura - s.top - s.bottom };
 }
 
-/** Deslocamento em px do centro da área livre em relação ao centro da tela (y para baixo). */
 export function deslocamentoCentro(o: Ocupacao, largura: number, altura: number): { dx: number; dy: number } {
   const s = sanitizarOcupacao(o, largura, altura);
   return { dx: (s.left - s.right) / 2, dy: (s.top - s.bottom) / 2 };
 }
 
-/**
- * Distância do centro de uma esfera de raio `raio` para que ela ocupe `fracao` do menor
- * lado da área livre. `fovGraus` é o campo de visão vertical da tela inteira.
- */
 export function distanciaEnquadramento(
   raio: number,
   fovGraus: number,

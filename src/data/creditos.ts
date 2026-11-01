@@ -1,12 +1,7 @@
-// Créditos de texturas e de fontes de dados exibidos pela interface.
-// Mesma lista da tabela de CREDITS.md. Cada textura do manifesto (src/data/texturas.ts) aponta
-// para uma destas constantes, e os testes conferem isso.
-
 export interface Credito { recurso: string; autor: string; licenca: string; url: string }
 
 const USGS_MOSAICOS = 'https://planetarymaps.usgs.gov/mosaic';
 
-// Texturas
 export const CREDITO_SSS: Credito = {
   recurso: 'Texturas do Solar System Scope (Sol, planetas, Lua, anéis de Saturno e mapas da Terra)',
   autor: 'Solar System Scope / INOVE, baseadas em dados da NASA',
@@ -70,7 +65,6 @@ export const CREDITO_PROCEDURAL: Credito = {
   url: 'https://nssdc.gsfc.nasa.gov/planetary/factsheet/',
 };
 
-// Dados
 export const CREDITO_NSSDCA: Credito = {
   recurso: 'Valores físicos e orbitais de planetas, Lua, Plutão e Sol',
   autor: 'NASA Space Science Data Coordinated Archive (NSSDCA), Planetary Fact Sheets',

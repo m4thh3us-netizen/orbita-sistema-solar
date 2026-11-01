@@ -5,7 +5,6 @@ import { PRIORIDADE } from './prioridades';
 import { RelogioSimulacao } from './relogio';
 import { ContextoRelogio } from './relogioContexto';
 
-/** Cria o relógio da simulação e o avança antes de qualquer outro `useFrame`. */
 export function ProvedorRelogio({ children }: { children: ReactNode }) {
   const relogio = useMemo(() => new RelogioSimulacao(), []);
   useFrame((_, dt) => {

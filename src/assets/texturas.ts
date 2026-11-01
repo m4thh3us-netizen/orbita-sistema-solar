@@ -1,14 +1,3 @@
-/**
- * Carregador de texturas da cena.
- * - Nunca lança erro: textura ausente ou corrompida vira `null` e a cena usa o procedural.
- * - Cache por URL com contagem de referências; o que fica sem uso por 20 s sai da GPU.
- * - Níveis: 'baixa' (1K, carregada primeiro, para a visão geral) e 'alta' (o arquivo
- *   declarado nos dados, sob demanda ao selecionar). A 1K segue a convenção dos dados
- *   (`caminhoTextura1k`); se não existir, usa o arquivo declarado.
- * - KTX2 é usado quando um manifesto opcional (`public/textures/manifest.json`, formato em
- *   docs/decisoes-cena.md) declara a variante e a GPU suporta; senão, WebP.
- * - Usa o DefaultLoadingManager, então o `useProgress` do Drei acompanha o carregamento.
- */
 import {
   ClampToEdgeWrapping,
   NoColorSpace,
@@ -81,7 +70,6 @@ function carregarManifesto(): Promise<Manifesto | null> {
   return manifesto;
 }
 
-/** Chamado uma vez quando o renderer existe: anisotropia máxima e suporte a KTX2. */
 export function configurarRenderer(gl: WebGLRenderer): void {
   rendererAtual = gl;
   anisotropiaMaxima = gl.capabilities.getMaxAnisotropy();
@@ -89,7 +77,6 @@ export function configurarRenderer(gl: WebGLRenderer): void {
   if (!coletor) coletor = setInterval(coletarSemUso, 5_000);
 }
 
-/** A qualidade define a anisotropia; texturas já carregadas são atualizadas. */
 export function definirAnisotropia(valor: number): void {
   const novo = Math.max(1, Math.min(valor, anisotropiaMaxima));
   if (novo === anisotropia) return;
@@ -109,7 +96,6 @@ function obterKtx2(): Promise<KTX2Loader | null> {
       ? import('three/addons/loaders/KTX2Loader.js')
           .then(({ KTX2Loader }) => {
             const l = new KTX2Loader();
-            // Transcodificador Basis da mesma versão do three, servido pelo jsDelivr.
             l.setTranscoderPath(`https://cdn.jsdelivr.net/npm/three@0.${REVISION}/examples/jsm/libs/basis/`);
             l.detectSupport(gl);
             return l;
@@ -179,7 +165,6 @@ function obterPedido(caminho: string, tipo: TipoTextura, nivel: NivelTextura): P
     let url = original;
     let ktx2 = false;
     if (nivel === 'baixa') {
-      // Convenção dos dados: 'terra/mapa.webp' tem a versão 1K em 'terra/mapa-1k.webp'.
       url = urlPublica(variante?.baixa ?? caminhoTextura1k(caminho));
     } else if (variante?.ktx2 && rendererAtual) {
       url = urlPublica(variante.ktx2);
@@ -188,7 +173,6 @@ function obterPedido(caminho: string, tipo: TipoTextura, nivel: NivelTextura): P
     let entrada = carregarUrl(url, tipo, ktx2);
     await entrada.promessa;
     if (entrada.estado === 'erro' && url !== original) {
-      // Sem a variante (1K ou KTX2): usa o arquivo declarado nos dados.
       url = original;
       entrada = carregarUrl(url, tipo, false);
       await entrada.promessa;
@@ -206,10 +190,6 @@ function texturaDe(pedido: Pedido): Texture | null {
   return e && e.estado === 'ok' ? e.textura : null;
 }
 
-/**
- * Leitura para Suspense: suspende enquanto carrega e devolve a textura ou `null` (falha
- * ou caminho ausente). Quem lê deve chamar `reter` num efeito para segurar a referência.
- */
 export function lerTextura(caminho: string | undefined, tipo: TipoTextura, nivel: NivelTextura): Texture | null {
   if (!caminho) return null;
   const pedido = obterPedido(caminho, tipo, nivel);
@@ -217,7 +197,6 @@ export function lerTextura(caminho: string | undefined, tipo: TipoTextura, nivel
   return texturaDe(pedido);
 }
 
-/** Inicia o carregamento sem suspender; `aoTerminar` recebe a textura (ou null). */
 export function pedirTextura(
   caminho: string,
   tipo: TipoTextura,
@@ -229,7 +208,6 @@ export function pedirTextura(
   else void pedido.promessa.then(() => aoTerminar(texturaDe(pedido)));
 }
 
-/** Segura a textura na GPU enquanto o retorno não for chamado. */
 export function reter(textura: Texture | null): () => void {
   if (!textura) return () => {};
   const entrada = [...porUrl.values()].find((e) => e.textura === textura);
@@ -251,7 +229,6 @@ function coletarSemUso(): void {
   }
 }
 
-/** Testa se a imagem tem alfa de verdade (anéis em JPG ou WebP opaco usam a luminância). */
 export function temAlfa(textura: Texture): boolean {
   const img = textura.image as CanvasImageSource & { width?: number; height?: number } | undefined;
   if (!img || typeof document === 'undefined') return true;

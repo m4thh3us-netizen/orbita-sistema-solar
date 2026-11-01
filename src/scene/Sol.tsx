@@ -1,7 +1,3 @@
-/**
- * Luz e coroa do Sol. A luz é pontual, sem decaimento (as distâncias da cena são
- * ilustrativas). A coroa é um quad que sempre encara a câmera.
- */
 import { useFrame } from '@react-three/fiber';
 import { useEffect, useMemo, useRef } from 'react';
 import { PlaneGeometry, type Mesh, type ShaderMaterial } from 'three';
@@ -10,7 +6,6 @@ import { COR_LUZ_SOL, LUZ_SOL } from './materiais/constantes';
 import { criarMaterialCoroa } from './materiais/sol';
 import { PRIORIDADE } from './prioridades';
 
-/** Metade do lado do quad da coroa, em raios solares. */
 const ALCANCE_COROA = 3.4;
 const QUAD = new PlaneGeometry(2, 2);
 

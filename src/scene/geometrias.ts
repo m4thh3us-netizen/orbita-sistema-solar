@@ -1,6 +1,5 @@
 import { SphereGeometry } from 'three';
 
-/** Esferas de raio 1 compartilhadas por resolução; as malhas escalam pelo raio. */
 const esferas = new Map<number, SphereGeometry>();
 
 export function esferaUnitaria(segmentos: number): SphereGeometry {
@@ -13,5 +12,4 @@ export function esferaUnitaria(segmentos: number): SphereGeometry {
   return g;
 }
 
-/** Colisores: baixa resolução basta para o raycast. */
 export const ESFERA_COLISOR = new SphereGeometry(1, 16, 12);

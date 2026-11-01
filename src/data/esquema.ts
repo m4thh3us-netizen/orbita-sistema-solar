@@ -1,19 +1,15 @@
-// Esquema Zod da camada de dados. Usado pelos testes (npm run validar-dados);
-// não é importado pela aplicação, então não entra no bundle.
-
 import { z } from 'zod';
 
 const textoNaoVazio = z.string().trim().min(1);
 const dataIso = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'data ISO yyyy-mm-dd');
 const corHex = z.string().regex(/^#[0-9A-F]{6}$/, 'cor #RRGGBB em maiúsculas');
 const caminhoTextura = z.string().regex(/^textures\/[a-z0-9-]+\/[a-z]+\.webp$/, 'textures/<id>/<tipo>.webp');
-const finito = z.number(); // o Zod 4 já rejeita Infinity e NaN
+const finito = z.number();
 
 export const esquemaFonte = z.strictObject({
   id: textoNaoVazio,
   titulo: textoNaoVazio,
   url: z.string().url(),
-  // Vazio = fonte citada mas não aberta na verificação (ver docs/dados.md).
   acessadoEm: z.union([dataIso, z.literal('')]),
 });
 

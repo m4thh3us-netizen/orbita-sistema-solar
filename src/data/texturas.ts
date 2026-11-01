@@ -1,7 +1,3 @@
-// Manifesto de texturas: de onde vem cada arquivo de public/textures, sob qual licença e com
-// quais ajustes. Lido por scripts/baixar-texturas.mjs (que baixa, converte ou gera os arquivos)
-// e pelos testes. Não é importado pela aplicação.
-
 import type { BodyId } from './types.ts';
 import type { TipoTextura } from './construtores.ts';
 import type { Credito } from './creditos.ts';
@@ -11,21 +7,15 @@ import {
 } from './creditos.ts';
 
 const SSS = 'https://www.solarsystemscope.com/textures/download';
-// planetarymaps.usgs.gov/mosaic redireciona para este bucket público do USGS.
 const USGS = 'https://asc-pds-services.s3.us-west-2.amazonaws.com/mosaic';
 
 export interface AjustesDownload {
-  /** Mosaico com longitude 180° no centro: rola meia largura para centralizar a longitude 0°. */
   centralizarLongitude0?: boolean;
-  /** Mosaico em tons de cinza: aplica esta cor mantendo a luminância (sharp.tint). */
   tingir?: string;
-  /** Preenche áreas sem dados (pretas) com o tom médio da superfície. */
   preencherVazios?: boolean;
-  /** Anéis: raio (km) do primeiro e do último pixel da imagem original, para recortar no raio do astro. */
   calibracaoRadialKm?: { inicio: number; fim: number };
 }
 
-/** Faixa de anel: alfa é ilustrativo, proporcional à profundidade óptica publicada. */
 export interface FaixaAnel { nome: string; inicioKm: number; fimKm: number; alfa: number }
 
 export type OrigemTextura =
@@ -38,7 +28,6 @@ export interface EntradaTextura {
   tipo: TipoTextura;
   origem: OrigemTextura;
   credito: Credito;
-  /** O que foi feito com o original (vai para CREDITS.md). */
   modificacoes: string;
 }
 
@@ -52,13 +41,11 @@ function usgs(id: BodyId, arquivo: string, credito: Credito, ajustes: AjustesDow
   return { id, tipo: 'mapa', origem: { tipo: 'download', url: `${USGS}/${arquivo}`, ajustes }, credito, modificacoes };
 }
 
-/** Faixa centrada num raio com uma largura (como as tabelas da NSSDCA apresentam os anéis). */
 function anel(nome: string, raioKm: number, larguraKm: number, alfa: number): FaixaAnel {
   return { nome, inicioKm: raioKm - larguraKm / 2, fimKm: raioKm + larguraKm / 2, alfa };
 }
 
 export const manifestoTexturas: EntradaTextura[] = [
-  // Solar System Scope (CC BY 4.0)
   sss('sol', 'mapa', '2k_sun.jpg'),
   sss('mercurio', 'mapa', '2k_mercury.jpg'),
   sss('venus', 'mapa', '2k_venus_atmosphere.jpg', `${CONVERSAO}. Usa o mapa das nuvens (o que se vê de fora), não o da superfície`),
@@ -77,7 +64,6 @@ export const manifestoTexturas: EntradaTextura[] = [
     origem: {
       tipo: 'download',
       url: `${SSS}/2k_saturn_ring_alpha.png`,
-      // Calibrado pelas bordas dos anéis B e A e da Divisão de Cassini (erro de ~1.000–2.000 km).
       ajustes: { calibracaoRadialKm: { inicio: 69_669, fim: 141_867 } },
     },
     credito: CREDITO_SSS,
@@ -89,7 +75,6 @@ export const manifestoTexturas: EntradaTextura[] = [
   { ...sss('makemake', 'mapa', '2k_makemake_fictional.jpg'), credito: CREDITO_SSS_ARTISTICO },
   { ...sss('eris', 'mapa', '2k_eris_fictional.jpg'), credito: CREDITO_SSS_ARTISTICO },
 
-  // USGS Astrogeology (domínio público)
   usgs('fobos', 'Phobos_Viking_Mosaic_40ppd_DLRcontrol.tif', CREDITO_FOBOS, {}, CONVERSAO),
   usgs('io', 'Io_GalileoSSI-Voyager_Global_Mosaic_ClrMerge_1km.tif', CREDITO_GALILEANAS, {}, CONVERSAO),
   usgs('europa', 'Europa_Voyager_GalileoSSI_global_mosaic_500m.tif', CREDITO_GALILEANAS,
@@ -119,7 +104,6 @@ export const manifestoTexturas: EntradaTextura[] = [
     { centralizarLongitude0: true },
     `${CONVERSAO}; longitude 0° centralizada`),
 
-  // Procedurais (representação artística)
   {
     id: 'deimos', tipo: 'mapa', credito: CREDITO_PROCEDURAL,
     origem: { tipo: 'crateras', semente: 2, cor: '#8A7D70', crateras: 260 },

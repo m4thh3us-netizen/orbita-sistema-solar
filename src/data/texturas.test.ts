@@ -5,7 +5,6 @@ import { caminhoTextura1k } from './construtores.ts';
 import { manifestoTexturas } from './texturas.ts';
 import creditsMd from '../../CREDITS.md?raw';
 
-// Lista os arquivos de public/textures sem precisar de tipos do Node (resolvido pelo Vite).
 const arquivos = new Set(
   Object.keys(import.meta.glob('../../public/textures/**/*.webp')).map((p) => p.replace('../../public/', '')),
 );

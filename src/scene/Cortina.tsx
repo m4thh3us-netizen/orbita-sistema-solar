@@ -1,8 +1,3 @@
-/**
- * Cortina escura em tela cheia para as transições curtas do movimento reduzido. É um
- * triângulo que cobre a tela em espaço de recorte (ignora a câmera) e só é desenhado
- * quando a opacidade passa de zero.
- */
 import { useFrame } from '@react-three/fiber';
 import { useMemo, useRef } from 'react';
 import { BufferAttribute, BufferGeometry, Color, ShaderMaterial, type Mesh } from 'three';

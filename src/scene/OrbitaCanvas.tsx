@@ -1,9 +1,3 @@
-/**
- * Canvas em tela cheia (preenche o contêiner pai). Escondido da tecnologia assistiva:
- * o conteúdo acessível está na interface HTML. Trata perda de contexto WebGL: espera a
- * restauração do navegador; se ela não vier, recria o canvas (até 2 vezes) e, em último
- * caso, mostra uma mensagem curta.
- */
 import { Canvas, type RootState } from '@react-three/fiber';
 import { Component, useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import { AgXToneMapping } from 'three';

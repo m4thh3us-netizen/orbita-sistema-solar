@@ -10,7 +10,6 @@ import { ProvedorRelogio } from './relogioCena';
 import { Rotulos } from './Rotulos';
 import { SistemaSolar } from './SistemaSolar';
 
-/** Tudo o que vive dentro do canvas. A luz do Sol fica no próprio Sol (Sol.tsx). */
 export function Cena() {
   return (
     <ProvedorRelogio>

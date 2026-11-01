@@ -42,7 +42,6 @@ function useControles() {
   );
 }
 
-/** Botões alternáveis: rótulo fixo + aria-pressed, como pede o padrão de toggle button. */
 function BotaoSimulacao({ c }: { c: ReturnType<typeof useControles> }) {
   return (
     <button
@@ -149,7 +148,6 @@ function BarraCompleta() {
   );
 }
 
-/** Celular: ações principais à mostra; velocidade, órbitas e nomes no menu "mais". */
 export function BarraCompacta() {
   const c = useControles();
   const maisAberto = useInterface((s) => s.maisAberto);
@@ -230,7 +228,6 @@ export function BarraCompacta() {
   );
 }
 
-/** Nota permanente de escala + link de créditos. */
 export function NotaEscala({ className = 'rodape__nota' }: { className?: string }) {
   const abrirModal = useInterface((s) => s.abrirModal);
   return (
@@ -253,9 +250,7 @@ export function Rodape() {
   const lateral = usePainelLateral();
   const sheetExpandido = useInterface((s) => s.sheet === 'expandido');
   const comSheet = useOrbita((s) => s.selecionado !== null) && !lateral;
-  // No celular, controles e nota vão para dentro do bottom sheet (nada flutua sobre o astro).
   const noSheet = comSheet && compacto;
-  // No tablet em retrato, com o sheet expandido a barra sairia pelo topo; ela some até ele baixar.
   const oculto = comSheet && sheetExpandido;
   const ref = useRef<HTMLElement>(null);
   useOcupacao(ref, 'bottom', !oculto && !noSheet);

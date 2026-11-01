@@ -6,10 +6,9 @@ import {
 } from './construtores.ts';
 import { KM_POR_UA } from './formatar.ts';
 
-// Elementos orbitais osculantes do JPL SBDB (época JD 2461200,5).
 const A_UA = 2.765552595;
-const GM = 62.6284; // km³/s² (Dawn)
-const RAIO = 469.7; // metade do diâmetro médio de 939,4 km
+const GM = 62.6284;
+const RAIO = 469.7;
 
 const luasCeres = luas(
   0,

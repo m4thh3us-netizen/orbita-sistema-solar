@@ -1,7 +1,3 @@
-/**
- * Para onde a câmera vai em cada estado da navegação: alvo, ângulos, distância de
- * enquadramento e limites de órbita/zoom.
- */
 import { Box3, Vector3 } from 'three';
 import { getBody, getChildren } from '@/data';
 import type { BodyId } from '@/data/types';
@@ -15,12 +11,10 @@ export interface Limites {
   maxDistancia: number;
   minPolar: number;
   maxPolar: number;
-  /** Visão geral: arrastar com o botão direito/dois dedos desloca, e o alvo fica numa caixa. */
   livre: boolean;
 }
 
 export interface Destino {
-  /** Astro seguido; null = ponto fixo (visão geral). */
   alvoId: BodyId | null;
   alvoFixo: Vector3;
   azimute: number;
@@ -34,20 +28,16 @@ export interface ContextoEnquadramento {
   largura: number;
   altura: number;
   ocupacao: Ocupacao;
-  /** Azimute atual da câmera (o Sol não tem lado iluminado preferido). */
   azimuteAtual: number;
 }
 
 const GRAUS = Math.PI / 180;
 const ORIGEM = new Vector3();
 
-/** Raio da cena que a visão geral enquadra: até a órbita de Netuno. */
 export const RAIO_SISTEMA = distanciaCena(30.5 * KM_POR_UA, 'planeta') + 2;
-/** Caixa onde o alvo pode passear na visão geral, para o usuário não se perder. */
 export const CAIXA_VISAO_GERAL = new Box3(new Vector3(-140, -45, -140), new Vector3(140, 45, 140));
 
 const AZIMUTE_GERAL = 0.65;
-/** 26° acima do plano orbital. */
 const POLAR_GERAL = (90 - 26) * GRAUS;
 
 const tmp = new Vector3();
@@ -75,7 +65,6 @@ export function destinoVisaoGeral(ctx: ContextoEnquadramento): Destino {
   };
 }
 
-/** Maior distância (centro a centro, no apoastro) das luas exploráveis de `id`. */
 function alcanceDasLuas(id: BodyId): number {
   const pai = getBody(id);
   if (!pai) return 0;
@@ -89,10 +78,6 @@ function alcanceDasLuas(id: BodyId): number {
   return maior;
 }
 
-/**
- * Destino para o estado atual do store, ou null se o astro ainda não está montado
- * (luas aparecem um quadro depois da seleção).
- */
 export function calcularDestino(s: OrbitaState, ctx: ContextoEnquadramento): Destino | null {
   if (s.modo === 'visao-geral' || !s.selecionado) return destinoVisaoGeral(ctx);
   const corpo = getBody(s.selecionado);
@@ -100,7 +85,6 @@ export function calcularDestino(s: OrbitaState, ctx: ContextoEnquadramento): Des
 
   const ehLua = corpo.tipo === 'lua';
   const modoLuas = s.modo === 'luas';
-  // Em modo luas o alvo é o planeta (se a seleção for uma lua, o pai dela).
   const alvoId = modoLuas && ehLua && corpo.pai ? corpo.pai : corpo.id;
   const entrada = registro.obter(alvoId);
   if (!entrada) return null;
@@ -125,7 +109,6 @@ export function calcularDestino(s: OrbitaState, ctx: ContextoEnquadramento): Des
   }
 
   if (ehLua && corpo.pai) {
-    // Câmera do lado de fora da órbita, girada ~29°: o planeta aparece ao fundo, ao lado.
     const pai = registro.obter(corpo.pai);
     const fora = pai ? tmp2.copy(tmp).sub(pai.objeto.getWorldPosition(new Vector3())) : tmp2.copy(tmp).negate();
     const distancia = distanciaEnquadramento(entrada.raioVisual, fov, largura, altura, ocupacao, 0.36);
@@ -148,7 +131,6 @@ export function calcularDestino(s: OrbitaState, ctx: ContextoEnquadramento): Des
   const ehSol = corpo.tipo === 'estrela';
   const fracao = ehSol ? 0.5 : 0.62;
   const distancia = distanciaEnquadramento(entrada.raioVisual, fov, largura, altura, ocupacao, fracao);
-  // Do lado do Sol, girado ~34°: disco quase todo iluminado, com um pouco de terminador.
   const azimute = ehSol ? ctx.azimuteAtual : azimuteDe(tmp2.copy(tmp).negate()) + 0.6;
   return {
     alvoId,

@@ -1,14 +1,3 @@
-/**
- * Controle de câmera. O CameraControls do Drei cuida da entrada do usuário (arrastar,
- * roda, pinça); este componente decide para onde a câmera vai e quando:
- * - entrada: voo de 2 s até a visão geral (direto com movimento reduzido);
- * - seleção/modo/reset: voo de 1,2–1,8 s (trajetoria.ts) ou fade ≤ 300 ms com movimento
- *   reduzido. Uma nova seleção no meio do voo parte da posição e velocidade atuais;
- * - depois de chegar: segue o astro na órbita mantendo o ângulo escolhido pelo usuário;
- * - `ocupacaoInterface`: desloca a projeção para centralizar o alvo na área livre e
- *   reenquadra suavemente quando os painéis mudam;
- * - visão geral parada: rotação automática lenta (desligada com movimento reduzido).
- */
 import { CameraControls, CameraControlsImpl } from '@react-three/drei';
 import { useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useRef } from 'react';
@@ -35,7 +24,7 @@ const DURACAO_ENTRADA = 2;
 const FADE_SAIDA = 0.11;
 const FADE_ENTRADA = 0.16;
 const OCIOSO_PARA_GIRAR_MS = 7000;
-const GIRO_AUTOMATICO = 0.025; // rad/s
+const GIRO_AUTOMATICO = 0.025;
 const POLAR_MIN_ABSOLUTO = 0.02;
 
 interface Medida {
@@ -61,7 +50,6 @@ type Estado =
       azDestino: number;
       afastamento: number;
       elevacao: number;
-      /** Desvio do caminho do alvo para contornar astros, aplicado com a lombada. */
       contorno: Vector3;
     }
   | { tipo: 'fade'; inicio: number; fase: 'saindo' | 'entrando'; destino: Destino }
@@ -85,29 +73,15 @@ const alvoVoo = new Vector3();
 const centroObstaculo = new Vector3();
 const posFinalVoo = new Vector3();
 
-/** Folga mínima entre a câmera em voo e um astro que não é o destino, em raios do astro. */
 const FOLGA_OBSTACULO = 2;
-/** Folga quando a pose final está longe do astro, então o desvio não afeta a chegada. */
 const FOLGA_OBSTACULO_LARGA = 3;
-/**
- * Enquanto o alvo ainda viaja, a câmera fica a pelo menos esta fração do caminho que
- * falta. Sem isso, o zoom (em log) termina antes do deslocamento e a câmera passa rente
- * ao planeta pai a caminho de uma lua.
- */
 const AFASTAMENTO_POR_CAMINHO = 1.2;
 
-/**
- * Empurra a posição da câmera para fora de astros no caminho (o planeta pai de uma lua,
- * o Sol). Suave (C¹): até 2·s de distância do centro nada muda na borda, e no centro a
- * câmera fica a s. `peso` (0–1) permite desligar o desvio no fim do voo.
- */
 function desviarDeObstaculos(p: Vector3, excetoId: string | null, peso: number, posFinal: Vector3): void {
   if (peso <= 0) return;
   for (const e of registro.todos()) {
     if (e.id === excetoId) continue;
     e.objeto.getWorldPosition(centroObstaculo);
-    // Se a pose final fica longe deste astro (ex.: voltando à visão geral), dá para
-    // passar mais afastado sem mexer na chegada.
     const longeDaChegada = centroObstaculo.distanceTo(posFinal) > e.raio * FOLGA_OBSTACULO_LARGA * 2.4;
     const folga = e.raio * (longeDaChegada ? FOLGA_OBSTACULO_LARGA : FOLGA_OBSTACULO);
     const limite = 2 * folga;
@@ -123,15 +97,8 @@ function desviarDeObstaculos(p: Vector3, excetoId: string | null, peso: number, 
   }
 }
 
-/** O caminho do alvo passa a pelo menos esta distância do centro de outro astro, em raios. */
 const RAIO_CONTORNO = 3.5;
 
-/**
- * Desvio lateral para o caminho reto do alvo (t0 → t1) contornar astros no meio, como
- * Júpiter entre duas luas em lados opostos ou o Sol entre Terra e Marte. Astros colados a
- * uma das pontas (o de partida, o pai do destino) não contam. O voo aplica o desvio com a
- * lombada (zero e sem velocidade nas pontas).
- */
 function desvioDoCaminho(t0: Vector3, t1: Vector3, excetoId: string | null, out: Vector3): Vector3 {
   out.set(0, 0, 0);
   const seg = v2.subVectors(t1, t0);
@@ -147,7 +114,6 @@ function desvioDoCaminho(t0: Vector3, t1: Vector3, excetoId: string | null, out:
     const afastamento = maisPerto.sub(centroObstaculo);
     const d = afastamento.length();
     if (d >= r) continue;
-    // Contorna pelo lado em que o caminho já passa; se cruza o centro, por cima.
     if (d < 1e-4) afastamento.set(0, 1, 0);
     else afastamento.divideScalar(d);
     out.addScaledVector(afastamento, r - d);
@@ -221,7 +187,6 @@ export function ControleCamera() {
   const reenquadrar = useRef(false);
   const distanciaPadrao = useRef(0);
   const deslocamento = useRef({ dx: 0, dy: 0, largura: 0, altura: 0 });
-  // Posição e velocidade do astro seguido, medidas quadro a quadro.
   const rastro = useRef({ id: null as string | null, pos: new Vector3(), vel: new Vector3(), valido: false });
 
   useEffect(
@@ -248,7 +213,6 @@ export function ControleCamera() {
       ultimaInteracao.current = performance.now();
       const e = estado.current;
       if (e.tipo !== 'voo') return;
-      // O usuário assumiu no meio do voo: segue o destino a partir de onde está.
       if (e.destino.alvoId && posicaoDoDestino(e.destino, v1)) residuo.current.copy(medida.current.alvo).sub(v1);
       estado.current = e.destino.alvoId ? { tipo: 'seguindo', destino: e.destino } : { tipo: 'livre', destino: e.destino };
       aplicarLimites(c, e.destino.limites);
@@ -269,7 +233,6 @@ export function ControleCamera() {
   }, []);
 
   useEffect(() => {
-    // Só em desenvolvimento: inspeção da câmera pelo console (window.__orbitaCamera).
     if (!import.meta.env.DEV) return;
     const w = window as unknown as { __orbitaCamera?: unknown };
     w.__orbitaCamera = { controles: ref.current, camera, estado, medida, registro };
@@ -331,7 +294,6 @@ export function ControleCamera() {
     const polar = c.polarAngle;
     const logDist = Math.log(Math.max(c.distance, 1e-6));
     if (m.valido && dt > 1e-4) {
-      // Média móvel curta: a velocidade só é usada para emendar voos sem tranco.
       const k = 0.5;
       m.vAlvo.lerp(v2.subVectors(v1, m.alvo).divideScalar(dt), k);
       m.vAz += (diferencaAngular(az, m.az) / dt - m.vAz) * k;
@@ -380,7 +342,6 @@ export function ControleCamera() {
     if (Math.abs(dx) < 0.5 && Math.abs(dy) < 0.5 && alvo.dx === 0 && alvo.dy === 0) {
       if (camera.view?.enabled) camera.clearViewOffset();
     } else {
-      // Desloca a janela de projeção: o alvo aparece no centro da área livre.
       camera.setViewOffset(largura, altura, -dx, -dy, largura, altura);
     }
   }
@@ -390,14 +351,12 @@ export function ControleCamera() {
     const s = useOrbita.getState();
     let destino = calcularDestino(s, ctx);
     if (!destino) {
-      // Astro ainda não montado (luas entram um quadro depois): espera até ~1,5 s.
       if (++p.tentativas < 90) return;
       destino = destinoVisaoGeral(ctx);
     }
     pedido.current = null;
 
     if (p.motivo === 'entrada') {
-      // Sempre entra de longe, acima do sistema, mesmo com link direto para um astro.
       const geral = destinoVisaoGeral(ctx);
       aplicarPose(c, geral.alvoFixo, geral.azimute - 1.1, 0.42, geral.distancia * 3.2);
       medida.current.valido = false;
@@ -456,11 +415,9 @@ export function ControleCamera() {
     const az = hermite(de.az, de.vAz * D, e.azDestino, 0, u);
     const polar = hermite(de.polar, de.vPolar * D, e.destino.polar, 0, u) - e.elevacao * b;
     const logDist = hermite(de.logDist, de.vLogDist * D, Math.log(e.destino.distancia), 0, u) + e.afastamento * b;
-    // Piso de distância pelo caminho restante; entra suave (sem tranco no início) e zera na chegada.
     const entrada = Math.min(1, u / 0.3);
     const pesoCaminho = entrada * entrada * (3 - 2 * entrada);
     const distancia = Math.exp(logDist) + AFASTAMENTO_POR_CAMINHO * alvoVoo.distanceTo(v1) * pesoCaminho;
-    // O desvio some nos últimos 20% do voo, para a pose final ser exatamente a calculada.
     const pesoDesvio = 1 - Math.min(1, Math.max(0, (u - 0.8) / 0.2)) ** 2;
     const d = e.destino;
     const pf = posFinalVoo.set(
@@ -483,7 +440,6 @@ export function ControleCamera() {
     if (e.fase === 'saindo') {
       cortina.opacidade = Math.min(1, t / FADE_SAIDA);
       if (t < FADE_SAIDA) return;
-      // Recalcula no escuro: o astro andou durante o fade.
       const destino = calcularDestino(useOrbita.getState(), ctx) ?? e.destino;
       if (posicaoDoDestino(destino, v1)) aplicarPose(c, v1, destino.azimute, destino.polar, destino.distancia);
       aplicarLimites(c, destino.limites);
@@ -509,7 +465,6 @@ export function ControleCamera() {
   function seguir(c: CameraControlsImpl, destino: Destino, dt: number) {
     if (!destino.alvoId) return;
     if (!posicaoDoDestino(destino, v1)) {
-      // O astro saiu da cena (ex.: lua desmontada): recalcula o destino.
       pedido.current = { motivo: 'navegacao', tentativas: 0 };
       return;
     }
@@ -522,7 +477,6 @@ export function ControleCamera() {
     const novo = calcularDestino(useOrbita.getState(), ctx);
     if (!novo || novo.alvoId !== e.destino.alvoId) return;
     const anterior = distanciaPadrao.current;
-    // Só reajusta o zoom se o usuário não mexeu nele (±8% do enquadramento anterior).
     if (anterior > 0 && Math.abs(c.distance - anterior) / anterior < 0.08) {
       aplicarLimites(c, novo.limites);
       void c.dollyTo(novo.distancia, !useOrbita.getState().movimentoReduzido);

@@ -1,16 +1,9 @@
-/**
- * Ordenação das interseções de ponteiro. Os colisores são esferas invisíveis maiores que
- * os astros, então se sobrepõem (Fobos fica dentro do colisor de Marte). Em vez do mais
- * próximo da câmera, ganha o astro cujo disco projetado está mais perto do ponteiro;
- * empates (ponteiro sobre os dois discos) ficam com o mais próximo da câmera.
- */
 import { events, type RootState, type RootStore } from '@react-three/fiber';
 import { Vector3, type Intersection, type PerspectiveCamera } from 'three';
 import type { BodyId } from '@/data/types';
 
 export interface DadosColisor {
   corpoId: BodyId;
-  /** Raio real da malha (não do colisor), em unidades de cena. */
   raioMalha: number;
 }
 

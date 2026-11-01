@@ -21,10 +21,8 @@ export const netuno = {
   aparencia: {
     corBase: '#3E66D6',
     corAcento: '#6E8BFF',
-    // Textura dos anéis gerada a partir dos raios da NSSDCA (anéis tênues e escuros).
     texturas: texturas('netuno', 'mapa', 'aneis'),
     atmosfera: { cor: '#7FA8FF', intensidade: 0.4 },
-    // Do anel Galle ao anel Adams.
     aneis: { raioInternoKm: 41_900, raioExternoKm: 62_933 },
     representacaoArtistica: false,
   },
@@ -84,8 +82,6 @@ export const netuno = {
   atualizadoEm: '2026-10-31',
 } satisfies CelestialBody;
 
-// Tritão — raio e GM: JPL SSD (phys_par); órbita: JPL SSD (elementos médios, plano equatorial de Netuno).
-// Inclinação de 157,3°: órbita retrógrada. A rotação síncrona acompanha esse sentido, por isso é negativa.
 const GM_TRITAO = 1428.49546;
 const RAIO_TRITAO = 1352.6;
 

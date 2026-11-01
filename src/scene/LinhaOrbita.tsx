@@ -1,7 +1,3 @@
-/**
- * Órbita em linha de 1 px. Mais clara logo atrás do astro e esmaecendo ao longo da
- * volta (rastro), na cor de acento quando o astro está em hover ou selecionado.
- */
 import { useFrame } from '@react-three/fiber';
 import { useEffect, useMemo } from 'react';
 import { BufferAttribute, BufferGeometry, Color, LineLoop, ShaderMaterial } from 'three';
@@ -85,8 +81,6 @@ export function LinhaOrbita({ corpo, elementos }: { corpo: CelestialBody; elemen
     u.uFase.value = anomaliaMedia(elementos, relogio.tempoOrbital) / (Math.PI * 2);
     const emFoco = s.modo !== 'visao-geral' && s.selecionado === corpo.id;
     const destacado = s.hover === corpo.id || emFoco;
-    // Na vista de um astro, órbitas de fora do sistema em foco quase somem para não
-    // cruzarem o primeiro plano; as luas (só montadas no sistema em foco) ficam normais.
     const foraDoFoco = s.modo !== 'visao-geral' && corpo.tipo !== 'lua' && !emFoco && getBody(s.selecionado ?? '')?.pai !== corpo.id;
     const alvo = s.hover === corpo.id ? 0.6 : emFoco ? 0.4 : OPACIDADE_BASE[corpo.tipo] * (foraDoFoco ? 0.3 : 1);
     const k = s.movimentoReduzido ? 1 : 1 - Math.exp(-dt * 10);

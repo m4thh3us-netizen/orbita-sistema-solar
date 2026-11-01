@@ -94,7 +94,6 @@ export const lua = {
   exploravel3D: true,
 
   fisico: { raioMedioKm: 1737.4, inclinacaoAxialGraus: 6.68, periodoRotacaoHoras: 655.72, rotacaoSincrona: true },
-  // Inclinação em relação à eclíptica (5,145°); em relação ao equador da Terra varia de 18,28° a 28,58°.
   orbita: { semiEixoMaiorKm: 384_400, periodoOrbitalDias: 27.3217, inclinacaoGraus: 5.145, excentricidade: 0.0549 },
 
   aparencia: {

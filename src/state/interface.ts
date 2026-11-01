@@ -1,16 +1,11 @@
 import { create } from 'zustand';
 
-/**
- * Estado local da interface (fora do contrato): o que está aberto, aba atual, estado do sheet.
- * Fica separado de `useOrbita` para a cena não re-renderizar por causa de painéis.
- */
 export type Aba = 'visao-geral' | 'composicao' | 'atmosfera' | 'luas' | 'curiosidades';
 export type EstadoSheet = 'recolhido' | 'meio' | 'expandido';
 export type Modal = 'ajuda' | 'creditos' | null;
 
 interface InterfaceState {
   catalogoAberto: boolean;
-  /** Incrementado para pedir foco no campo de busca (atalho `/`). */
   pedidoFocoBusca: number;
   modal: Modal;
   maisAberto: boolean;

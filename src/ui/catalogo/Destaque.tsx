@@ -1,6 +1,5 @@
 import type { Trecho } from './busca';
 
-/** Texto com o trecho buscado envolvido em <mark>. */
 export function Destaque({ texto, trecho }: { texto: string; trecho: Trecho | null }) {
   if (!trecho) return <>{texto}</>;
   return (

@@ -21,10 +21,8 @@ export const urano = {
   aparencia: {
     corBase: '#9FD8DE',
     corAcento: '#7FE6E6',
-    // Textura dos anéis gerada a partir dos raios da NSSDCA (anéis estreitos e escuros).
     texturas: texturas('urano', 'mapa', 'aneis'),
     atmosfera: { cor: '#A8EEF2', intensidade: 0.35 },
-    // Do anel 6 (o mais interno da lista da NSSDCA) ao anel ε (épsilon).
     aneis: { raioInternoKm: 41_837, raioExternoKm: 51_149 },
     representacaoArtistica: false,
   },
@@ -83,9 +81,6 @@ export const urano = {
   fontes: fontesPor('nssdca-planetas', 'nssdca-urano', 'nssdca-aneis-urano', 'nasa-urano-luas'),
   atualizadoEm: '2026-10-31',
 } satisfies CelestialBody;
-
-// Luas — raio e GM: JPL SSD (phys_par); órbita: JPL SSD (elementos médios, plano equatorial de Urano).
-// Rotação positiva: no mesmo sentido da rotação de Urano (ver convenção em types.ts).
 
 const GM_TITANIA = 226.9;
 const RAIO_TITANIA = 788.9;

@@ -1,8 +1,3 @@
-/**
- * Malha visível de um astro. Enquanto as texturas carregam (Suspense), mostra a mesma
- * malha com a aparência procedural; quando chegam, troca sem piscar. Textura ausente ou
- * com erro também cai no procedural: a cena nunca quebra por causa de um arquivo.
- */
 import { useFrame } from '@react-three/fiber';
 import { Suspense, useEffect, useMemo, useRef } from 'react';
 import type { Mesh, ShaderMaterial } from 'three';
@@ -66,7 +61,6 @@ function MalhaTerra({ raio, texturas }: { raio: number; texturas: TexturasAstro 
     aplicarTexturaNuvens(materialNuvens, texturas?.nuvens ?? null);
   }, [material, materialNuvens, texturas?.mapa, texturas?.noite, texturas?.especular, texturas?.nuvens]);
 
-  // As nuvens derivam devagar em relação à superfície.
   useFrame(() => {
     if (nuvens.current) nuvens.current.rotation.y = relogio.tempoRotacao * 0.012;
   }, PRIORIDADE.corpos);
@@ -84,7 +78,6 @@ function MalhaSol({ corpo, raio }: { corpo: CelestialBody; raio: number }) {
   const material = useMemo(() => criarMaterialSol(corpo.aparencia.corBase), [corpo.aparencia.corBase]);
   useEffect(() => () => material.dispose(), [material]);
   useFrame((_, dt) => {
-    // Granulação em tempo real (não no relógio da simulação); parada com movimento reduzido.
     if (!useOrbita.getState().movimentoReduzido) (material as ShaderMaterial).uniforms.uTempo.value += Math.min(dt, 0.1);
   }, PRIORIDADE.corpos);
   return <mesh geometry={esferaUnitaria(96)} material={material} scale={raio} />;
@@ -103,7 +96,6 @@ function Malha({ texturas, ...props }: Omit<Props, 'detalhado'> & { texturas: Te
 
 function MalhaTexturizada({ detalhado, ...props }: Props) {
   const qualidade = useOrbita((s) => s.qualidade);
-  // O shader da Terra não usa mapa normal; os demais usam o do MeshStandardMaterial.
   const usarNormal = props.aparencia.material === 'padrao';
   const texturas = useTexturasAstro(props.corpo, detalhado, PERFIS[qualidade].texturaAlta, usarNormal);
   return <Malha {...props} texturas={texturas} />;

@@ -31,7 +31,6 @@ export function Marca() {
   );
 }
 
-/** Sistema Solar → Saturno → Titã (o Sol é a raiz, representado por "Sistema Solar"). */
 export function Trilha() {
   const selecionado = useOrbita((s) => s.selecionado);
   const modo = useOrbita((s) => s.modo);

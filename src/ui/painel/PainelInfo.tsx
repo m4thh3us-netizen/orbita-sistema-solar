@@ -33,7 +33,6 @@ function PainelLateral({ corpo }: { corpo: CelestialBody }) {
 
   return (
     <section ref={ref} className="painel-lateral" aria-labelledby={idTitulo}>
-      {/* key: troca de astro reinicia rolagem e animação de entrada */}
       <div key={corpo.id} className="painel-lateral__rolagem">
         <ConteudoAstro corpo={corpo} idTitulo={idTitulo} />
       </div>
@@ -41,9 +40,6 @@ function PainelLateral({ corpo }: { corpo: CelestialBody }) {
   );
 }
 
-// ------------------------------------------------------------------ Bottom sheet
-
-/** Recolhido mostra só tipo + nome; no celular soma a linha de controles e a nota de escala. */
 const ALTURA_RECOLHIDO = 116;
 const ALTURA_RECOLHIDO_COMPACTO = 184;
 const ESTADOS: readonly EstadoSheet[] = ['recolhido', 'meio', 'expandido'];
@@ -77,16 +73,10 @@ interface Gesto {
   altura0: number;
   yAnterior: number;
   tAnterior: number;
-  velocidade: number; // px/ms, positivo = para baixo
+  velocidade: number;
   arrastou: boolean;
 }
 
-/**
- * Bottom sheet com três estados (recolhido mostra o nome; meio; expandido).
- * A alça é um botão grande: arrastar ajusta a altura, soltar encaixa no estado mais próximo
- * (considerando a velocidade), arrastar para baixo além do recolhido fecha (volta um nível).
- * Clique/Enter alterna os estados; ↑/↓ sobem e descem um estado.
- */
 function BottomSheet({ corpo }: { corpo: CelestialBody }) {
   const estado = useInterface((s) => s.sheet);
   const setSheet = useInterface((s) => s.setSheet);
@@ -107,12 +97,10 @@ function BottomSheet({ corpo }: { corpo: CelestialBody }) {
 
   useOcupacao(ref, 'bottom');
 
-  // Cada nova abertura (vinda da visão geral) começa no meio.
   useEffect(() => {
     setSheet('meio');
   }, [setSheet]);
 
-  // A barra de controles flutua logo acima do sheet.
   useEffect(() => {
     const estilo = document.documentElement.style;
     estilo.setProperty('--altura-sheet', `${altura}px`);
@@ -160,7 +148,6 @@ function BottomSheet({ corpo }: { corpo: CelestialBody }) {
       voltar();
       return;
     }
-    // Projeta a posição pela velocidade para um "arremesso" pular de estado.
     const projetada = final - g.velocidade * 180;
     const alvo = ESTADOS.reduce((melhor, s) =>
       Math.abs(alturas[s] - projetada) < Math.abs(alturas[melhor] - projetada) ? s : melhor,

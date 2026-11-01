@@ -6,7 +6,6 @@ import {
   formatarTemperatura, formatarUA,
 } from './formatar.ts';
 
-// Os helpers usam espaço não separável (U+00A0) entre número e unidade; aqui ele vira espaço comum.
 const s = (texto: string) => texto.replace(/\u00A0/g, ' ');
 
 describe('formatar', () => {

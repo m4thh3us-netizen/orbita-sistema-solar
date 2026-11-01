@@ -1,8 +1,3 @@
-/**
- * Cinturão de asteroides (2,1–3,3 UA) e de Kuiper (30–50 UA) com InstancedMesh:
- * rochas low-poly com leve variação de tamanho e brilho, girando devagar com o relógio
- * da simulação (paradas com movimento reduzido). A quantidade depende da qualidade.
- */
 import { useFrame } from '@react-three/fiber';
 import { useEffect, useMemo, useRef } from 'react';
 import {
@@ -28,13 +23,10 @@ interface ConfigCinturao {
   nome: string;
   uaMin: number;
   uaMax: number;
-  /** Desvio da inclinação, em graus. */
   dispersaoGraus: number;
   tamanho: [number, number];
   cores: string[];
-  /** Período orbital típico, para a velocidade de giro do conjunto. */
   periodoDias: number;
-  /** Tamanho máximo de cada rocha na tela, em px. */
   maxPx: number;
 }
 
@@ -67,8 +59,6 @@ function gaussiana(r: () => number): number {
 function criarCinturao(cfg: ConfigCinturao, quantidade: number): InstancedMesh {
   const geometria = new IcosahedronGeometry(1, 0);
   const material = new MeshStandardMaterial({ roughness: 1, metalness: 0, flatShading: true });
-  // Limita o tamanho na tela: de perto (vista de um planeta) as rochas viram pontos de
-  // ~2 px em vez de pedregulhos; de longe (visão geral) mantêm o tamanho natural.
   const uniforms = { uMundoPorPx: { value: 0.001 }, uMaxPx: { value: cfg.maxPx } };
   material.onBeforeCompile = (shader) => {
     Object.assign(shader.uniforms, uniforms);
@@ -96,7 +86,6 @@ function criarCinturao(cfg: ConfigCinturao, quantidade: number): InstancedMesh {
   const cor = new Color();
   const paleta = cfg.cores.map((c) => new Color(c));
   for (let i = 0; i < quantidade; i++) {
-    // Densidade maior no meio da faixa (média de dois sorteios).
     const ua = cfg.uaMin + (cfg.uaMax - cfg.uaMin) * ((r() + r()) / 2);
     const raio = distanciaCena(ua * KM_POR_UA, 'planeta-anao');
     const angulo = r() * Math.PI * 2;
@@ -104,7 +93,6 @@ function criarCinturao(cfg: ConfigCinturao, quantidade: number): InstancedMesh {
     pos.set(raio * Math.cos(angulo), raio * Math.sin(inclinacao) * 0.6, -raio * Math.sin(angulo));
     euler.set(r() * 6.28, r() * 6.28, r() * 6.28);
     q.setFromEuler(euler);
-    // Maioria pequena, poucos grandes; leve achatamento irregular.
     const t = cfg.tamanho[0] + (cfg.tamanho[1] - cfg.tamanho[0]) * Math.pow(r(), 3);
     esc.set(t * (0.7 + r() * 0.6), t * (0.6 + r() * 0.5), t * (0.7 + r() * 0.6));
     m.compose(pos, q, esc);

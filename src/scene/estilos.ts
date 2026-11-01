@@ -1,9 +1,3 @@
-/**
- * Aparência de cada astro na cena: qual material usar e os parâmetros do relevo
- * procedural. O procedural é o que aparece quando a textura não existe ou falha, e dá
- * a "variação leve" sobre `corBase` pedida no contrato. Com textura, só `forma`,
- * `deformacao` e `rugosidade` continuam valendo.
- */
 import type { CelestialBody } from '@/data/types';
 
 export type TipoSuperficie = 'rochoso' | 'gasoso' | 'gelo' | 'vulcanico';
@@ -18,7 +12,6 @@ export interface Mancha {
 
 export interface EstiloSuperficie {
   tipo: TipoSuperficie;
-  /** Tom secundário: mares, faixas escuras, fissuras. */
   cor2?: string;
   contraste: number;
   mares?: number;
@@ -27,9 +20,7 @@ export interface EstiloSuperficie {
   faixas?: number;
   turbulencia?: number;
   mancha?: Mancha;
-  /** Relevo irregular (0 = esfera). Para luas pequenas como Fobos. */
   deformacao?: number;
-  /** Escala por eixo (Haumea é um elipsoide). */
   forma?: [number, number, number];
   rugosidade?: number;
 }
@@ -52,7 +43,6 @@ const ESTILOS: Record<string, EstiloSuperficie> = {
     turbulencia: 1.1,
     cor2: '#8c5d3f',
     rugosidade: 1,
-    // Grande Mancha Vermelha: ~22° S, ~16 000 × 12 000 km.
     mancha: { latGraus: -22, lonGraus: 40, larguraGraus: 15, alturaGraus: 7, cor: '#b4583f' },
   },
   saturno: { tipo: 'gasoso', contraste: 0.5, faixas: 11, turbulencia: 0.5, cor2: '#b0925f', rugosidade: 1 },

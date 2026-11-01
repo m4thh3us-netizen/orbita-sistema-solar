@@ -2,11 +2,6 @@ import { useState, type CSSProperties } from 'react';
 import type { CelestialBody } from '@/data/types';
 import { urlPublica } from '@/ui/formatacao';
 
-/**
- * Imagem estática: o `mapa` da textura recortado num disco com sombreamento,
- * ou um círculo na `corBase` se não houver textura (ou ela falhar).
- * Decorativa — o nome do astro está sempre no texto ao lado.
- */
 export function ImagemAstro({
   corpo,
   tamanho,

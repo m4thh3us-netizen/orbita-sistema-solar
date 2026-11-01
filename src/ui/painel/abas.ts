@@ -9,14 +9,12 @@ export const ABAS: readonly { id: Aba; rotulo: string }[] = [
   { id: 'curiosidades', rotulo: 'Curiosidades' },
 ];
 
-/** Só existem as abas com seção nos dados; "Luas" depende de `conteudo.luas` não ser nulo. */
 export function abasDisponiveis(corpo: CelestialBody): Aba[] {
   return ABAS.filter(({ id }) =>
     id === 'luas' ? corpo.conteudo.luas !== null : corpo.conteudo.secoes[id] !== undefined,
   ).map(({ id }) => id);
 }
 
-/** Mantém a aba atual se o novo astro a tiver; senão volta para Visão geral (ou a primeira). */
 export function resolverAba(atual: Aba, disponiveis: readonly Aba[]): Aba | null {
   if (disponiveis.includes(atual)) return atual;
   if (disponiveis.includes('visao-geral')) return 'visao-geral';

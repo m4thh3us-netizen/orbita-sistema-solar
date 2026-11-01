@@ -8,10 +8,6 @@ interface Props {
   children: ReactNode;
 }
 
-/**
- * Modal sobre <dialog> nativo: showModal() deixa o resto da página inerte (foco preso),
- * Esc dispara `cancel`, e ao fechar o foco volta para quem abriu.
- */
 export function Modal({ titulo, aoFechar, children }: Props) {
   const ref = useRef<HTMLDialogElement>(null);
   const idTitulo = useId();
@@ -36,7 +32,6 @@ export function Modal({ titulo, aoFechar, children }: Props) {
   }, []);
 
   return (
-    // Clique no backdrop (o próprio <dialog>) fecha; o teclado já tem Esc e o botão Fechar.
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
     <dialog
       ref={ref}

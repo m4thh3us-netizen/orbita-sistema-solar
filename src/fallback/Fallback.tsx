@@ -39,10 +39,6 @@ const exploraveis = bodies.filter((c) => c.exploravel3D);
 const contarLuas = (id: string) => getChildren(id, { exploravel3D: true }).length;
 const OPCOES_FILTRO = FILTROS.map((f) => ({ valor: f.id, rotulo: f.rotulo }));
 
-/**
- * Modo catálogo para quando não há WebGL: mesma identidade, mesmos dados e a mesma URL
- * (#/saturno, #/saturno/luas, #/saturno/tita), sem nenhum código 3D.
- */
 export default function Fallback() {
   const selecionado = useOrbita((s) => s.selecionado);
   const modo = useOrbita((s) => s.modo);
@@ -54,7 +50,6 @@ export default function Fallback() {
 
   useAtalhos({ somenteNavegacao: true });
 
-  // A cada navegação: volta ao topo e leva o foco ao título da nova página.
   useEffect(() => {
     if (primeiraVez.current) {
       primeiraVez.current = false;

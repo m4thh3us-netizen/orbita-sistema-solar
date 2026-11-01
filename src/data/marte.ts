@@ -87,7 +87,6 @@ export const marte = {
   atualizadoEm: '2026-10-31',
 } satisfies CelestialBody;
 
-// Fobos — raio e GM: JPL SSD; órbita: NSSDCA (Mars Fact Sheet).
 const GM_FOBOS = 0.0007087;
 const RAIO_FOBOS = 11.08;
 
@@ -152,7 +151,6 @@ export const fobos = {
   atualizadoEm: '2026-10-31',
 } satisfies CelestialBody;
 
-// Deimos — raio e GM: JPL SSD; órbita: NSSDCA (Mars Fact Sheet).
 const GM_DEIMOS = 0.0000962;
 const RAIO_DEIMOS = 6.2;
 

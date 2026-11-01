@@ -10,7 +10,6 @@ export interface PerfilQualidade {
   bloom: boolean;
   multisampling: number;
   anisotropia: number;
-  /** Carrega a textura em alta resolução ao selecionar. */
   texturaAlta: boolean;
   viaLactea: boolean;
 }
@@ -67,7 +66,6 @@ export function qualidadeAcima(q: Qualidade): Qualidade {
   return ORDEM_QUALIDADE[Math.min(ORDEM_QUALIDADE.length - 1, ORDEM_QUALIDADE.indexOf(q) + 1)];
 }
 
-/** Ponto de partida antes de medir: celular e telas pequenas começam em 'media'. */
 export function qualidadeInicial(): Qualidade {
   try {
     const grosso = window.matchMedia('(pointer: coarse)').matches;

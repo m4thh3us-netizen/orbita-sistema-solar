@@ -1,8 +1,3 @@
-/**
- * Relógio próprio da simulação. Acumula "segundos de cena" (um segundo real em 1×),
- * então pausar e retomar continua do mesmo instante, sem salto. Mudanças de velocidade
- * e de pausa são suavizadas (~0,2 s), exceto com movimento reduzido.
- */
 export interface EntradaRelogio {
   velocidade: number;
   pausada: boolean;
@@ -10,14 +5,11 @@ export interface EntradaRelogio {
   suavizar: boolean;
 }
 
-/** Quadros mais longos que isto (aba em segundo plano, depurador) não adiantam o relógio. */
 export const DT_MAXIMO = 0.1;
 const CONSTANTE_SUAVIZACAO = 0.18;
 
 export class RelogioSimulacao {
-  /** Tempo das órbitas, em segundos de cena. */
   tempoOrbital = 0;
-  /** Tempo das rotações axiais; para quando a rotação do astro está pausada. */
   tempoRotacao = 0;
   velocidadeEfetiva = 1;
   fatorRotacao = 1;

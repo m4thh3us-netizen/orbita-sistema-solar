@@ -1,7 +1,3 @@
-/**
- * Dados mínimos para testes da interface: mesma API de `@/data`, sem depender do conteúdo real
- * (que é do especialista 3 e pode mudar). Usado via `vi.mock('@/data', () => import(...))`.
- */
 import type { BodyId, BodyType, CelestialBody } from '@/data/types';
 
 interface Opcoes {

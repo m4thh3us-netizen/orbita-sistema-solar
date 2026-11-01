@@ -20,7 +20,6 @@ const TIPOGRAFIA = [
   },
 ];
 
-/** Fontes de todos os astros, sem repetição (por URL), com os astros que as citam. */
 function fontesDosDados(): { fonte: Fonte; astros: string[] }[] {
   const porUrl = new Map<string, { fonte: Fonte; astros: string[] }>();
   for (const corpo of bodies) {

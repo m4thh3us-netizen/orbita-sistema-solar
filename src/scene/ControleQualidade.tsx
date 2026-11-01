@@ -1,8 +1,3 @@
-/**
- * Ajuste automático de qualidade com o PerformanceMonitor do Drei: cai um nível quando o
- * fps fica abaixo da faixa e sobe quando sobra folga. Se oscilar demais, fica no nível de
- * baixo. A qualidade escolhida define DPR, partículas, sombra dos anéis, bloom e texturas.
- */
 import { PerformanceMonitor } from '@react-three/drei';
 import { useThree } from '@react-three/fiber';
 import { useEffect } from 'react';

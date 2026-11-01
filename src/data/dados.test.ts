@@ -5,7 +5,6 @@ import { esquemaCorpo } from './esquema.ts';
 import { DIAS_POR_ANO, KM_POR_UA } from './formatar.ts';
 import type { CelestialBody, Dado } from './types.ts';
 
-// Escopo fechado do projeto (prompt 3). Os testes podem citar ids; a aplicação, não.
 const ESCOPO = {
   estrela: ['sol'],
   planeta: ['mercurio', 'venus', 'terra', 'marte', 'jupiter', 'saturno', 'urano', 'netuno'],
@@ -25,7 +24,6 @@ function dado(b: CelestialBody, rotulo: string): Dado | undefined {
   return todosOsDados(b).find((d) => d.rotulo === rotulo);
 }
 
-/** Percorre o objeto e devolve o caminho de toda string vazia ou só com espaços. */
 function stringsVazias(valor: unknown, caminho: string, saida: string[] = []): string[] {
   if (typeof valor === 'string') {
     if (!valor.trim() && !caminho.endsWith('.acessadoEm')) saida.push(caminho);
@@ -50,7 +48,6 @@ function contraste(a: string, b: string): number {
   return (l1 + 0.05) / (l2 + 0.05);
 }
 
-/** Cor em CIELAB (D65) para medir distância perceptual (ΔE76). */
 function lab(hex: string): [number, number, number] {
   const lin = (i: number) => {
     const c = Number.parseInt(hex.slice(1 + i * 2, 3 + i * 2), 16) / 255;
@@ -161,7 +158,7 @@ describe.each(bodies.map((b) => [b.id, b] as const))('%s', (id, b) => {
   it('usa formatação pt-BR (menos tipográfico, sem ponto decimal)', () => {
     for (const d of todosOsDados(b)) {
       expect(d.valor, d.rotulo).not.toMatch(/(^|\s)-\d/);
-      expect(d.valor, d.rotulo).not.toMatch(/\d\.\d{1,2}(?!\d)/); // "3.7" seria decimal em inglês
+      expect(d.valor, d.rotulo).not.toMatch(/\d\.\d{1,2}(?!\d)/);
     }
   });
 
@@ -201,8 +198,6 @@ describe.each(bodies.map((b) => [b.id, b] as const))('%s', (id, b) => {
     if (!b.orbita || !massaPai) return;
     const a = b.orbita.semiEixoMaiorKm * 1e3;
     const periodoTeoricoDias = (2 * Math.PI * Math.sqrt(a ** 3 / (G * massaPai))) / 86400;
-    // Tolerância de 3 %: elementos médios × osculantes e massa do satélite desprezada,
-    // exceto em Caronte, que tem ~11 % da massa do sistema.
     const tolerancia = b.id === 'caronte' ? 0.08 : 0.03;
     expect(Math.abs(b.orbita.periodoOrbitalDias / periodoTeoricoDias - 1)).toBeLessThan(tolerancia);
   });

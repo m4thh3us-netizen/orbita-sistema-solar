@@ -45,7 +45,7 @@ describe('explorarLuas', () => {
     estado().selecionar('mercurio');
     estado().explorarLuas();
     expect(estado().modo).toBe('astro');
-    estado().selecionar('makemake'); // tem lua conhecida, mas nenhuma explorável
+    estado().selecionar('makemake');
     estado().explorarLuas();
     expect(estado().modo).toBe('astro');
   });

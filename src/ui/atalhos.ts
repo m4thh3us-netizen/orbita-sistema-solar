@@ -25,7 +25,6 @@ export function ehCampoDeTexto(el: EventTarget | null): boolean {
   return el instanceof HTMLInputElement && TIPOS_TEXTO.has(el.type);
 }
 
-/** Controles que já usam Espaço (ativar) — o atalho não pode roubar a tecla deles. */
 function usaEspaco(el: EventTarget | null): boolean {
   return (
     el instanceof HTMLElement &&
@@ -35,7 +34,6 @@ function usaEspaco(el: EventTarget | null): boolean {
   );
 }
 
-/** Widgets em que as setas navegam internamente. */
 function usaSetas(el: EventTarget | null): boolean {
   return (
     el instanceof HTMLElement &&
@@ -52,11 +50,6 @@ function focarPorId(id: string) {
 export const ID_BOTAO_CATALOGO = 'botao-catalogo';
 export const ID_BOTAO_MAIS = 'botao-mais-controles';
 
-/**
- * Atalhos globais. Ficam desligados com foco em campo de texto, com modal aberto
- * ou quando um componente já tratou a tecla (`defaultPrevented`).
- * `somenteNavegacao` (fallback sem 3D) deixa só Esc, ←/→ e `?`.
- */
 export function useAtalhos({ somenteNavegacao = false } = {}): void {
   useEffect(() => {
     const aoPressionar = (e: KeyboardEvent) => {

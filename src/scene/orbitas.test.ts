@@ -53,8 +53,8 @@ describe('posicaoOrbital', () => {
 
   it('gira no sentido anti-horário visto de +Y (prógrado)', () => {
     const el = elementos();
-    const a = posicaoOrbital(el, 0, ponto()); // +X
-    const b = posicaoOrbital(el, 15, ponto()); // um quarto de volta → −Z
+    const a = posicaoOrbital(el, 0, ponto());
+    const b = posicaoOrbital(el, 15, ponto());
     expect(a.x).toBeGreaterThan(0);
     expect(b.z).toBeLessThan(0);
     expect(Math.abs(b.x)).toBeLessThan(1e-6);

@@ -17,7 +17,6 @@
   outline: none;
 }
 
-/* Amplia a área de toque sem mudar o layout (alvos ≥ 44px). */
 .alvo-amplo {
   position: relative;
 }
@@ -27,8 +26,6 @@
   position: absolute;
   inset: -8px -4px;
 }
-
-/* ------------------------------------------------------------------ Topo */
 
 .topo {
   position: fixed;
@@ -205,8 +202,6 @@
   }
 }
 
-/* ------------------------------------------------------------ Introdução */
-
 .introducao {
   position: fixed;
   z-index: 10;
@@ -299,8 +294,6 @@
     margin-top: 12px;
   }
 }
-
-/* ------------------------------------------------------------ Rodapé e controles */
 
 .rodape {
   position: fixed;
@@ -415,7 +408,6 @@
   background: var(--cor-linha);
 }
 
-/* Compacta (celular) */
 .controles--compacta {
   position: relative;
   padding: 4px;

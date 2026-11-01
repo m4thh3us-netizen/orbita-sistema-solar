@@ -1,10 +1,3 @@
-/**
- * Anéis planetários. A geometria é um RingGeometry com UV radial (u = 0 na borda interna,
- * 1 na externa), então uma textura de faixa 1D (como as de anéis de Saturno com alfa) cai
- * no lugar certo. O shader ilumina os dois lados (o lado oposto ao Sol recebe só a luz que
- * atravessa) e, na qualidade alta, calcula a sombra do planeta de forma analítica:
- * o raio do fragmento em direção ao Sol intercepta a esfera do planeta?
- */
 import { Color, DoubleSide, RingGeometry, ShaderMaterial, Vector3, type Texture } from 'three';
 import { LUZ_AMBIENTE, LUZ_SOL } from './constantes';
 import { GLSL_LUZ } from './glsl';
@@ -18,7 +11,6 @@ export function criarGeometriaAneis(interno: number, externo: number, segmentos 
     uv.setXY(i, (r - interno) / (externo - interno), 0.5);
   }
   uv.needsUpdate = true;
-  // RingGeometry nasce no plano XY; os anéis ficam no plano equatorial (XZ).
   g.rotateX(-Math.PI / 2);
   return g;
 }

@@ -18,7 +18,7 @@ describe('busca sem acentos e sem caixa', () => {
   });
 
   it('funciona com texto decomposto (NFD)', () => {
-    const decomposto = 'Titã'; // "Titã" com til combinante
+    const decomposto = 'Titã';
     const trecho = localizarTrecho(decomposto, 'tita');
     expect(trecho).not.toBeNull();
     expect(decomposto.slice(trecho!.inicio, trecho!.fim)).toBe('Titã');

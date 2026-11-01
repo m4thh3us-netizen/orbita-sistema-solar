@@ -19,22 +19,14 @@ import {
   ESPACO,
 } from './formatar.ts';
 
-// Construtores de `Dado`: cada arquivo de astro passa só números reais + fonte, e a
-// formatação pt-BR fica num lugar só. `valorNumerico` sempre em unidades SI
-// (m, kg, m/s², K, s, Pa).
-
-/** Referências da Terra para comparações (NSSDCA). Gravidade: equatorial, com rotação. */
 export const TERRA = { massaKg: 5.9722e24, gravidadeMs2: 9.8 } as const;
 
-/** Constante gravitacional (CODATA 2018), para obter massa a partir de GM. */
 const G = 6.6743e-11;
 
-/** Massa em kg a partir do parâmetro gravitacional GM em km³/s² (JPL). */
 export function massaDeGM(gmKm3s2: number): number {
   return (gmKm3s2 * 1e9) / G;
 }
 
-/** Gravidade superficial (sem efeito de rotação) a partir de GM em km³/s² e raio em km. */
 export function gravidadeDeGM(gmKm3s2: number, raioKm: number): number {
   return (gmKm3s2 * 1e9) / (raioKm * 1e3) ** 2;
 }
@@ -72,13 +64,11 @@ export function gravidade(ms2: number, fonteId: FonteId, nota?: string): Dado {
   return dado('Gravidade na superfície', valor, fonteId, nota, ms2);
 }
 
-/** Temperatura única. `representa` explica o que o número significa; a nota traz o valor em K. */
 export function temperatura(t: Temperatura, representa: string, fonteId: FonteId, rotulo = 'Temperatura'): Dado {
   const nota = `${representa} (${formatarKelvin(emKelvin(t))}).`;
   return dado(rotulo, formatarTemperatura(emCelsius(t)), fonteId, nota, emKelvin(t));
 }
 
-/** Faixa de temperatura. `valorNumerico` guarda o máximo, em K. */
 export function faixaTemperatura(min: Temperatura, max: Temperatura, representa: string, fonteId: FonteId, rotulo = 'Temperatura'): Dado {
   const valor = `${formatarTemperatura(emCelsius(min))} a ${formatarTemperatura(emCelsius(max))}`;
   const nota = `${representa} (${formatarKelvin(emKelvin(min))} a ${formatarKelvin(emKelvin(max))}).`;
@@ -112,7 +102,6 @@ export function inclinacaoAxial(graus: number, fonteId: FonteId, nota?: string):
   return dado('Inclinação do eixo', `${formatarNumero(graus, graus < 10 ? 2 : 1)}°`, fonteId, nota, graus);
 }
 
-/** Componente de atmosfera ou composição em porcentagem do volume (ou da massa, conforme a nota). */
 export function percentual(rotulo: string, p: number, fonteId: FonteId, nota?: string, casas = 1): Dado {
   return dado(rotulo, formatarPercentual(p, casas), fonteId, nota, p / 100);
 }
@@ -123,13 +112,8 @@ export function aneis(tem: boolean, descricao: string, fonteId?: FonteId): Dado 
 
 type Luas = NonNullable<CelestialBody['conteudo']['luas']>;
 
-/** Data em que as contagens de luas foram conferidas nas fontes (ver docs/dados.md). */
 export const LUAS_VERIFICADAS_EM = '2026-10-31';
 
-/**
- * Objeto `conteudo.luas`. Para atualizar uma contagem isolada, mude o número e passe a data
- * da nova verificação em `verificadoEm` (ver docs/dados.md).
- */
 export function luas(
   totalConhecidas: number | null,
   fonteId: FonteId,
@@ -141,7 +125,6 @@ export function luas(
   return l;
 }
 
-/** Dado "Luas conhecidas" derivado do mesmo objeto usado em `conteudo.luas` (fonte única). */
 export function luasConhecidas(l: Luas): Dado {
   const valor = l.totalConhecidas === null ? 'Desconhecido' : formatarNumero(l.totalConhecidas);
   const nota = l.totalConhecidas === 0
@@ -153,14 +136,12 @@ export function luasConhecidas(l: Luas): Dado {
 type Texturas = CelestialBody['aparencia']['texturas'];
 export type TipoTextura = keyof Texturas;
 
-/** Caminhos de textura relativos a /public: texturas('terra', 'mapa') → { mapa: 'textures/terra/mapa.webp' }. */
 export function texturas(id: string, ...tipos: TipoTextura[]): Texturas {
   const t: Texturas = {};
   for (const tipo of tipos) t[tipo] = `textures/${id}/${tipo}.webp`;
   return t;
 }
 
-/** Variante de 1K de uma textura: 'textures/terra/mapa.webp' → 'textures/terra/mapa-1k.webp'. */
 export function caminhoTextura1k(caminho: string): string {
   return caminho.replace(/\.webp$/, '-1k.webp');
 }

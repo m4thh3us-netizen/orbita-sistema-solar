@@ -3,10 +3,8 @@ import { fontesPor } from './fontes.ts';
 import { aneis, diametro, distanciaDoSol, luas, luasConhecidas, periodoOrbital, rotacao, texturas } from './construtores.ts';
 import { KM_POR_UA } from './formatar.ts';
 
-// Elementos orbitais osculantes do JPL SBDB (época JD 2461200,5).
 const A_UA = 45.57093317;
 
-// Uma lua provisória: S/2015 (136472) 1, apelidada de MK2.
 const luasMakemake = luas(1, 'nasa-makemake');
 
 export const makemake = {
@@ -17,7 +15,6 @@ export const makemake = {
   ordem: 12,
   exploravel3D: true,
 
-  // Obliquidade desconhecida: 0 é convenção de renderização, não um dado (ver docs/dados.md).
   fisico: { raioMedioKm: 715, inclinacaoAxialGraus: 0, periodoRotacaoHoras: 22.8266 },
   orbita: { semiEixoMaiorKm: A_UA * KM_POR_UA, periodoOrbitalDias: 112_364.807, inclinacaoGraus: 29.028, excentricidade: 0.1589 },
 

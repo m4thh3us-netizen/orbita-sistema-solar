@@ -10,10 +10,6 @@ export interface Rota {
 
 export const ROTA_VISAO_GERAL: Rota = { selecionado: null, modo: 'visao-geral' };
 
-/**
- * `#/` visão geral · `#/saturno` · `#/saturno/luas` · `#/saturno/tita`.
- * Luas sempre aparecem sob o pai, para o link mostrar o caminho completo.
- */
 export function rotaParaHash(rota: Rota): string {
   const { selecionado, modo } = rota;
   if (!selecionado || modo === 'visao-geral') return '#/';
@@ -23,10 +19,6 @@ export function rotaParaHash(rota: Rota): string {
   return `#/${selecionado}`;
 }
 
-/**
- * Converte o hash em rota. Qualquer ID desconhecido (ou caminho malformado) cai na visão geral
- * com `valida: false`; quem chama decide se reescreve a URL.
- */
 export function hashParaRota(hash: string): { rota: Rota; valida: boolean } {
   const invalida = { rota: ROTA_VISAO_GERAL, valida: false };
   const caminho = hash.replace(/^#/, '').replace(/^\/+|\/+$/g, '');
@@ -55,18 +47,11 @@ export function hashParaRota(hash: string): { rota: Rota; valida: boolean } {
   return { rota: { selecionado: lua.id, modo: 'astro' }, valida: true };
 }
 
-/** `''`, `#` e `#/` representam a mesma visão geral. */
 function mesmoHash(a: string, b: string): boolean {
   const limpar = (h: string) => (h === '' || h === '#' ? '#/' : h);
   return limpar(a) === limpar(b);
 }
 
-/**
- * Sincroniza store e URL nos dois sentidos:
- * - estado → URL com `pushState` (cada navegação vira uma entrada do histórico);
- * - URL → estado em `popstate`/`hashchange` (voltar/avançar, links diretos, edição manual).
- * Hash inválido volta para a visão geral e é reescrito com `replaceState`.
- */
 export function iniciarSincronizacaoURL(
   store: StoreApi<OrbitaState>,
   win: Window = window,

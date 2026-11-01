@@ -1,6 +1,6 @@
 # Integração das três áreas
 
-Mantido pela Interface (especialista 2). Registra como as áreas se encaixam, o que foi verificado com tudo junto e o que ainda depende de cada área.
+Registra como as áreas se encaixam, o que foi verificado com tudo junto e o que ainda depende de cada área.
 
 ## Estado em 31/10/2026
 
@@ -25,7 +25,7 @@ Mantido pela Interface (especialista 2). Registra como as áreas se encaixam, o 
 
 ## Convenções combinadas entre as áreas
 
-- **Raiz do projeto**: `projetos/`; caminhos do contrato relativos a ela.
+- **Raiz do projeto**: a raiz do repositório; caminhos do contrato relativos a ela.
 - **three 0.186.1**, porque o `postprocessing` 6.39.5 exige `< 0.187`.
 - **Node ≥ 22.18**, por causa do `scripts/baixar-texturas.mjs` (área 3), que importa `.ts` direto no Node.
 - `.cache/` fica fora do git (originais das texturas, ~1,5 GB); `public/textures/` (~12 MB) vai para o repositório.

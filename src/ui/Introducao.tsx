@@ -2,7 +2,6 @@ import { useInterface } from '@/state/interface';
 import { useOrbita } from '@/state/store';
 import { IconeCatalogo } from './icones';
 
-/** Título e instrução da visão geral; somem com fade ao selecionar um astro. */
 export function Introducao() {
   const visivel = useOrbita((s) => s.selecionado === null);
   const carregado = useInterface((s) => s.carregado);

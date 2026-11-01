@@ -1,15 +1,4 @@
 #!/usr/bin/env node
-// Baixa, converte e gera as texturas do Órbita a partir de src/data/texturas.ts.
-//
-// Uso:
-//   npm run baixar-texturas                      # tudo o que ainda não existe
-//   npm run baixar-texturas -- --somente=terra,lua
-//   npm run baixar-texturas -- --forcar          # refaz mesmo o que já existe
-//   npm run baixar-texturas -- --sem-download    # só as texturas procedurais
-//
-// Saída: public/textures/<id>/<tipo>.webp (2K) e <tipo>-1k.webp (1K).
-// Originais: .cache/texturas-originais/ (fora do bundle; podem ser apagados).
-// Requer Node 22.18+ (importa os arquivos .ts de src/data com remoção de tipos nativa) e sharp.
 
 import { createWriteStream } from 'node:fs';
 import { mkdir, rename, stat } from 'node:fs/promises';
@@ -37,8 +26,6 @@ const args = process.argv.slice(2);
 const forcar = args.includes('--forcar');
 const semDownload = args.includes('--sem-download');
 const somente = args.find((a) => a.startsWith('--somente='))?.split('=')[1]?.split(',').filter(Boolean);
-
-// ---------------------------------------------------------------- utilidades
 
 async function existe(arquivo) {
   try {
@@ -72,7 +59,6 @@ async function baixar(url) {
   return arquivo;
 }
 
-/** Executa tarefas com no máximo `n` em paralelo. */
 async function emParalelo(itens, n, tarefa) {
   const fila = [...itens];
   const falhas = [];
@@ -92,7 +78,6 @@ async function emParalelo(itens, n, tarefa) {
   return falhas;
 }
 
-/** Gerador pseudoaleatório determinístico (mulberry32). */
 function aleatorio(semente) {
   let s = semente >>> 0;
   return () => {
@@ -104,10 +89,6 @@ function aleatorio(semente) {
   };
 }
 
-/**
- * Imagem em tons de cinza tingida com uma cor, mantendo a luminância.
- * (O sharp.tint só colore entradas de 3 canais, por isso o cinza é replicado antes.)
- */
 function tingirCinza(cinza, largura, altura, cor) {
   const rgb = Buffer.alloc(largura * altura * 3);
   for (let i = 0; i < cinza.length; i++) rgb[i * 3] = rgb[i * 3 + 1] = rgb[i * 3 + 2] = cinza[i];
@@ -122,7 +103,6 @@ function hexParaRgb(hex) {
 async function salvarPar(imagem2k, entrada, dimensoes1k, opcoesWebp) {
   const { k2, k1 } = caminhos(entrada);
   await mkdir(path.dirname(k2), { recursive: true });
-  // Decodifica uma vez e gera as duas resoluções a partir dos mesmos pixels (sem recompressão dupla).
   const { data, info } = await imagem2k.raw().toBuffer({ resolveWithObject: true });
   const raw = { raw: { width: info.width, height: info.height, channels: info.channels } };
   await sharp(data, raw).webp(opcoesWebp).toFile(k2);
@@ -133,8 +113,6 @@ async function salvarPar(imagem2k, entrada, dimensoes1k, opcoesWebp) {
   const [a, b] = await Promise.all([stat(k2), stat(k1)]);
   console.log(`  ✓ ${entrada.id}/${entrada.tipo}.webp (${mb(a.size)}) e -1k (${mb(b.size)})`);
 }
-
-// ------------------------------------------------------------ mapas baixados
 
 async function processarMapa(entrada, original) {
   const { ajustes = {} } = entrada.origem;
@@ -161,7 +139,6 @@ async function processarMapa(entrada, original) {
   }
 
   if (ajustes.preencherVazios) {
-    // Pixels quase pretos em todos os canais = sem dados. Recebem a cor média dos pixels válidos.
     const LIMIAR = 12;
     const vazio = (i) => {
       for (let c = 0; c < canais; c++) if (pixels[i + c] > LIMIAR) return false;
@@ -203,9 +180,6 @@ async function processarAnelBaixado(entrada, original) {
   await salvarPar(imagem, entrada, { largura: ANEL_2K.largura / 2, altura: ANEL_2K.altura / 2 }, WEBP_ALFA);
 }
 
-// ------------------------------------------------------- texturas procedurais
-
-/** Ruído de valor 3D com interpolação suave, amostrado na esfera para não ter emendas. */
 function criarRuido(semente) {
   const sorte = aleatorio(semente);
   const perm = Uint16Array.from({ length: 512 }, (_, i) => i & 255);
@@ -229,10 +203,6 @@ function criarRuido(semente) {
   };
 }
 
-/**
- * Superfície procedural: relevo (ruído fractal + crateras + vales) sombreado por uma luz
- * fixa, somado a variações de albedo. Tudo é calculado na esfera, sem emendas.
- */
 function gerarCrateras(origem) {
   const { largura, altura } = MAPA_2K;
   const sorte = aleatorio(origem.semente * 7919);
@@ -243,7 +213,6 @@ function gerarCrateras(origem) {
   const latDe = (y) => Math.PI / 2 - ((y + 0.5) / altura) * Math.PI;
   const lonDe = (x) => ((x + 0.5) / largura) * 2 * Math.PI - Math.PI;
 
-  // Base: ruído fractal de 8 oitavas para o relevo e de 5 para o albedo.
   for (let y = 0; y < altura; y++) {
     const lat = latDe(y);
     const cl = Math.cos(lat), sl = Math.sin(lat);
@@ -269,7 +238,6 @@ function gerarCrateras(origem) {
     }
   }
 
-  // Aplica `efeito(d)` em volta de um ponto da esfera, com d = distância angular / raio.
   function aoRedor(lat0, lon0, raio, alcance, efeito) {
     const lim = raio * alcance;
     const y0 = Math.max(0, Math.floor(((Math.PI / 2 - (lat0 + lim)) / Math.PI) * altura));
@@ -288,8 +256,7 @@ function gerarCrateras(origem) {
     }
   }
 
-  // Crateras: tamanhos em lei de potência, posições uniformes na esfera.
-  const raioMin = 0.0035, raioMax = 0.2; // radianos
+  const raioMin = 0.0035, raioMax = 0.2;
   for (let i = 0; i < origem.crateras; i++) {
     const r = Math.min(raioMax, raioMin * Math.pow(1 - sorte() * 0.9995, -1 / 1.45));
     const lat0 = Math.asin(2 * sorte() - 1);
@@ -298,33 +265,31 @@ function gerarCrateras(origem) {
     const recente = sorte() < 0.2;
     const fundoEscuro = origem.fundoEscuro && sorte() < 0.3;
     aoRedor(lat0, lon0, r, recente ? 2.2 : 1.5, (i, d) => {
-      if (d < 1) relevo[i] += profundidade * (Math.max(d, 0.35) ** 2 - 1); // tigela de fundo achatado
-      relevo[i] += profundidade * 0.3 * Math.exp(-(((d - 1) / 0.18) ** 2)); // borda elevada
-      if (recente) albedo[i] += 0.05 * Math.exp(-(((d - 1.1) / 0.45) ** 2)); // material ejetado
+      if (d < 1) relevo[i] += profundidade * (Math.max(d, 0.35) ** 2 - 1);
+      relevo[i] += profundidade * 0.3 * Math.exp(-(((d - 1) / 0.18) ** 2));
+      if (recente) albedo[i] += 0.05 * Math.exp(-(((d - 1.1) / 0.45) ** 2));
       if (fundoEscuro && d < 0.85) albedo[i] -= 0.22 * (1 - (d / 0.85) ** 4);
     });
   }
 
-  // Vales de falha: depressões largas ao longo de arcos de grande círculo.
   for (let c = 0; c < (origem.canions ?? 0); c++) {
     const lat0 = Math.asin(2 * sorte() - 1) * 0.8;
     const lon0 = sorte() * 2 * Math.PI - Math.PI;
     const rumo = sorte() * Math.PI;
-    const comprimento = 0.6 + sorte() * 0.9; // radianos
-    const meiaLargura = 0.012 + sorte() * 0.01; // radianos
+    const comprimento = 0.6 + sorte() * 0.9;
+    const meiaLargura = 0.012 + sorte() * 0.01;
     for (let s = -comprimento / 2; s <= comprimento / 2; s += meiaLargura / 2) {
       const lat = Math.asin(Math.sin(lat0) * Math.cos(s) + Math.cos(lat0) * Math.sin(s) * Math.cos(rumo));
       const lon = lon0 + Math.atan2(Math.sin(rumo) * Math.sin(s) * Math.cos(lat0), Math.cos(s) - Math.sin(lat0) * Math.sin(lat));
-      const afinar = 1 - (2 * s / comprimento) ** 4; // pontas mais rasas
+      const afinar = 1 - (2 * s / comprimento) ** 4;
       aoRedor(lat, lon, meiaLargura, 2, (i, d) => {
         relevo[i] = Math.min(relevo[i], relevo[i] - 0.007 * afinar * Math.exp(-d * d * 1.5));
       });
     }
   }
 
-  // Sombreamento: normal a partir do gradiente (corrigindo a distorção da projeção) e luz fixa.
   const luz = [-0.55, 0.55, 0.63];
-  const escalaRelevo = altura / Math.PI; // radianos → pixels
+  const escalaRelevo = altura / Math.PI;
   const pixels = Buffer.alloc(largura * altura);
   for (let y = 0; y < altura; y++) {
     const cosLat = Math.max(Math.cos(latDe(y)), 0.05);
@@ -349,8 +314,6 @@ function gerarAneis(entrada, origem) {
   const kmPorPixel = (aneis.raioExternoKm - aneis.raioInternoKm) / largura;
   const alfa = new Float32Array(largura);
   for (const faixa of origem.faixas) {
-    // Recorta a faixa ao intervalo da textura e garante ao menos 1,5 px de largura, para que
-    // anéis estreitos ou rentes à borda (como o Adams, de Netuno) continuem visíveis.
     const minimo = kmPorPixel * 1.5;
     let inicio = Math.max(faixa.inicioKm, aneis.raioInternoKm);
     let fim = Math.min(faixa.fimKm, aneis.raioExternoKm);
@@ -380,8 +343,6 @@ function gerarAneis(entrada, origem) {
   }
   return sharp(pixels, { raw: { width: largura, height: altura, channels: 4 } });
 }
-
-// ----------------------------------------------------------------- execução
 
 async function processar(entrada) {
   const { k2, k1 } = caminhos(entrada);

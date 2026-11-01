@@ -22,10 +22,8 @@ export const jupiter = {
   aparencia: {
     corBase: '#C9A37A',
     corAcento: '#F2A36B',
-    // Anéis muito tênues: a textura é gerada a partir dos raios da NSSDCA, com alfa baixo.
     texturas: texturas('jupiter', 'mapa', 'aneis'),
     atmosfera: { cor: '#E8D2B0', intensidade: 0.2 },
-    // Do limite interno do halo (89.400 km) ao limite externo do anel de Tebe (221.900 km).
     aneis: { raioInternoKm: 89_400, raioExternoKm: 221_900 },
     representacaoArtistica: false,
   },
@@ -86,8 +84,6 @@ export const jupiter = {
   fontes: fontesPor('nssdca-planetas', 'nssdca-jupiter', 'nssdca-aneis-jupiter', 'nasa-jupiter-luas'),
   atualizadoEm: '2026-10-31',
 } satisfies CelestialBody;
-
-// Luas galileanas — raio e GM: JPL SSD (phys_par); órbita: JPL SSD (elementos médios, plano de Laplace).
 
 const GM_IO = 5959.91547;
 const RAIO_IO = 1821.49;

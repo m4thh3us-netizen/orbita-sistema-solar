@@ -12,7 +12,6 @@ import { useOrbita } from './state/store';
 import { iniciarSincronizacaoURL } from './state/url';
 import { iniciarAtributosDocumento } from './ui/documento';
 
-// Antes do primeiro render: um link direto (#/saturno/tita) já abre no astro certo.
 iniciarSincronizacaoURL(useOrbita);
 iniciarPersistencia(useOrbita);
 iniciarMovimentoReduzido(useOrbita);

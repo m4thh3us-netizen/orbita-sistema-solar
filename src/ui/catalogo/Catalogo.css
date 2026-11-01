@@ -78,7 +78,7 @@
   min-height: var(--alvo-toque);
   border: 0;
   background: none;
-  font-size: 16px; /* 16px evita zoom automático no iOS */
+  font-size: 16px;
 }
 
 .catalogo__busca input::placeholder {
@@ -197,7 +197,6 @@
   color: var(--cor-texto-2);
 }
 
-/* Celular / altura baixa: catálogo em tela cheia, acima de tudo. */
 @media (max-width: 639px), (max-height: 500px) {
   .catalogo {
     z-index: 40;

@@ -3,6 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "description": "Órbita — explorador 3D do Sistema Solar",
+  "author": "Matheus Lopes",
   "type": "module",
   "engines": {
     "node": ">=22.18"

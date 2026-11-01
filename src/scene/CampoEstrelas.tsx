@@ -1,10 +1,3 @@
-/**
- * Campo de estrelas em três camadas de profundidade. Cada camada acompanha a câmera com
- * um pequeno atraso (fator de parallax), então as estrelas nunca saem do alcance e as
- * camadas mais próximas deslizam um pouco mais: parallax leve. ~40% das estrelas se
- * concentram numa faixa (a Via Láctea), que também ganha um brilho difuso sutil.
- * A cintilação para com movimento reduzido.
- */
 import { useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useMemo, useRef } from 'react';
 import {
@@ -81,7 +74,6 @@ void main() {
 }
 `;
 
-/** Cor por temperatura aproximada: azul-branca, branca, amarelada, alaranjada. */
 const CORES = ['#9fb8ff', '#cad7ff', '#ffffff', '#fff4e0', '#ffd9a8', '#ffb98a'].map((c) => new Color(c));
 
 function direcaoAleatoria(r: () => number, naFaixa: boolean, out: Vector3): Vector3 {
@@ -90,7 +82,6 @@ function direcaoAleatoria(r: () => number, naFaixa: boolean, out: Vector3): Vect
   const s = Math.sqrt(1 - z * z);
   out.set(s * Math.cos(t), z, s * Math.sin(t));
   if (naFaixa) {
-    // Achata em direção ao plano galáctico.
     const h = out.dot(POLO_GALACTICO);
     out.addScaledVector(POLO_GALACTICO, -h * 0.85).normalize();
   }
@@ -108,7 +99,6 @@ function criarCamada(indice: number, quantidade: number): Points {
   for (let i = 0; i < quantidade; i++) {
     direcaoAleatoria(r, r() < 0.4, d).multiplyScalar(cfg.raio * (0.92 + r() * 0.16));
     pos.set([d.x, d.y, d.z], i * 3);
-    // Muitas estrelas fracas, poucas brilhantes.
     const brilho = 0.12 + Math.pow(r(), 4) * 0.85;
     const c = CORES[Math.floor(r() * CORES.length)];
     cor.set([c.r * brilho, c.g * brilho, c.b * brilho], i * 3);

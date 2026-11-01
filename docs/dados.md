@@ -3,7 +3,7 @@
 Este documento explica de onde vêm os números e textos de `src/data/`, como foram verificados, o que ainda está incerto e como manter tudo atualizado.
 
 - **Verificação:** 31/10/2026.
-- **Responsável:** especialista 3 (Dados).
+- **Área:** Dados (`src/data/`).
 - **Validação automática:** `npm run validar-dados`.
 
 ## Metodologia

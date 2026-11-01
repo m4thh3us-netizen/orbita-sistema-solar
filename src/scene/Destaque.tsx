@@ -1,8 +1,3 @@
-/**
- * Destaque de hover: um anel fino na cor de acento ao redor do astro, sempre voltado
- * para a câmera, com espessura constante de ~1,5 px e raio mínimo em px (objetos pequenos
- * ganham um alvo visível). Responde ao hover da cena e ao da interface (lista, busca).
- */
 import { useFrame, useThree } from '@react-three/fiber';
 import { useMemo, useRef } from 'react';
 import { Color, PlaneGeometry, ShaderMaterial, Vector3, type Mesh, type PerspectiveCamera } from 'three';

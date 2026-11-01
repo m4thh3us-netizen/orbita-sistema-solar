@@ -14,10 +14,6 @@ interface Props {
   idTitulo: string;
 }
 
-/**
- * Conteúdo científico de um astro em HTML semântico. Usado no painel lateral,
- * no bottom sheet e no fallback sem WebGL.
- */
 export function ConteudoAstro({ corpo, idTitulo }: Props) {
   const modo = useOrbita((s) => s.modo);
   const voltar = useOrbita((s) => s.voltar);
@@ -29,12 +25,10 @@ export function ConteudoAstro({ corpo, idTitulo }: Props) {
   const aba = resolverAba(abaGuardada, disponiveis);
   const pai = corpo.tipo === 'lua' && corpo.pai ? getBody(corpo.pai) : undefined;
 
-  // Aba inexistente no novo astro: volta para Visão geral (e fica registrada assim).
   useEffect(() => {
     if (aba && aba !== abaGuardada) setAba(aba);
   }, [aba, abaGuardada, setAba]);
 
-  // Entrar no modo luas (botão, atalho ou link direto) abre a aba Luas.
   useEffect(() => {
     if (modo === 'luas' && disponiveis.includes('luas')) setAba('luas');
   }, [modo, disponiveis, setAba]);
@@ -89,7 +83,6 @@ interface PropsAbas {
   aoMudar(a: Aba): void;
 }
 
-/** Padrão ARIA de abas com ativação automática: ←/→, Home e End. */
 function Abas({ corpo, idBase, disponiveis, aba, aoMudar }: PropsAbas) {
   const botoes = useRef<Partial<Record<Aba, HTMLButtonElement | null>>>({});
 
@@ -177,7 +170,6 @@ function SecaoConteudo({ secao, corpo }: { secao: Secao; corpo: CelestialBody })
   );
 }
 
-/** Cada `Dado` vira par rótulo/valor numa lista de definição; a nota explica o valor. */
 export function ListaDados({ dados, corpo }: { dados: Dado[]; corpo: CelestialBody }) {
   return (
     <dl className="dados">

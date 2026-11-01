@@ -1,9 +1,3 @@
-/**
- * Terra: mapa diurno, luzes noturnas só no lado escuro (pelo ângulo com o Sol), brilho
- * especular só nos oceanos e um leve tom quente no terminador. As nuvens ficam numa
- * camada separada (criarMaterialNuvens) que gira por conta própria.
- * Sem texturas, continentes, oceanos, gelo, cidades e nuvens são procedurais.
- */
 import { NormalBlending, ShaderMaterial, Vector3, type Texture } from 'three';
 import { LUZ_AMBIENTE, LUZ_SOL } from './constantes';
 import { GLSL_LUZ, GLSL_RUIDO, GLSL_VERTICE_MUNDO as VERTICE } from './glsl';

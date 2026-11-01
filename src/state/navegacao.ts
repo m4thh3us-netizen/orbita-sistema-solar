@@ -6,12 +6,10 @@ export function porOrdem(a: CelestialBody, b: CelestialBody): number {
   return a.ordem - b.ordem || (a.orbita?.semiEixoMaiorKm ?? 0) - (b.orbita?.semiEixoMaiorKm ?? 0);
 }
 
-/** Raiz da hierarquia (o Sol), descoberta pelos dados em vez de fixada no código. */
 function raizes(): CelestialBody[] {
   return bodies.filter((c) => c.pai === null && c.exploravel3D);
 }
 
-/** Sequência percorrida por ←/→ no nível atual: Sol + filhos do Sol, ou as luas irmãs. */
 export function sequenciaDoNivel(selecionado: BodyId | null, modo: Modo): CelestialBody[] {
   const exploraveis = (id: BodyId) => getChildren(id, { exploravel3D: true }).sort(porOrdem);
 
@@ -23,10 +21,6 @@ export function sequenciaDoNivel(selecionado: BodyId | null, modo: Modo): Celest
   return [...raizes(), ...exploraveis('sol')];
 }
 
-/**
- * Astro anterior/próximo pela `ordem`, com volta circular.
- * Sem seleção (ou no modo luas), → começa no primeiro item e ← no último.
- */
 export function astroVizinho(
   selecionado: BodyId | null,
   modo: Modo,

@@ -75,7 +75,6 @@
   color: var(--cor-texto-2);
 }
 
-/* Tabela de atalhos / gestos */
 .tabela {
   width: 100%;
   border-collapse: collapse;
@@ -111,7 +110,6 @@ kbd {
   text-align: center;
 }
 
-/* Créditos */
 .creditos {
   display: flex;
   flex-direction: column;

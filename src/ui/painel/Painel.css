@@ -1,5 +1,3 @@
-/* ------------------------------------------------------------ Painel lateral */
-
 .painel-lateral {
   position: fixed;
   z-index: 20;
@@ -50,8 +48,6 @@
     transform: translateY(calc(var(--deslocamento) * 0.5));
   }
 }
-
-/* ------------------------------------------------------------ Bottom sheet */
 
 .sheet {
   position: fixed;
@@ -129,7 +125,6 @@
   right: 8px;
 }
 
-/* Celular: controles da cena e a alça dividem a primeira linha do sheet. */
 .sheet__topo--controles {
   display: grid;
   grid-template-columns: auto minmax(64px, 1fr) auto;
@@ -184,7 +179,6 @@
   overflow: hidden;
 }
 
-/* No sheet o nome vem primeiro, para aparecer mesmo recolhido. */
 .sheet .astro__voltar {
   order: 4;
 }

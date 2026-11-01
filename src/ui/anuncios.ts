@@ -2,7 +2,6 @@ import { getBody } from '@/data';
 import type { OrbitaState } from '@/state/store';
 import { aNome, deNome, formatarVelocidade } from './formatacao';
 
-/** Texto para a região aria-live a partir da mudança de estado (ou null se nada a anunciar). */
 export function mensagemDeMudanca(s: OrbitaState, anterior: OrbitaState): string | null {
   if (s.selecionado !== anterior.selecionado || s.modo !== anterior.modo) {
     if (!s.selecionado) return 'Visão geral do Sistema Solar';

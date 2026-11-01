@@ -20,7 +20,6 @@ function rgbParaHex([r, g, b]: Rgb): string {
   return `#${[r, g, b].map((c) => Math.round(c).toString(16).padStart(2, '0')).join('')}`;
 }
 
-/** Luminância relativa (WCAG 2.x). */
 export function luminancia([r, g, b]: Rgb): number {
   const canal = (c: number) => {
     const s = c / 255;
@@ -34,10 +33,6 @@ export function contraste(a: Rgb, b: Rgb): number {
   return (claro + 0.05) / (escuro + 0.05);
 }
 
-/**
- * Clareia a cor de acento (misturando com branco) até atingir o contraste mínimo sobre o fundo.
- * Os acentos vêm dos dados; alguns (azuis e vermelhos escuros) não passariam no AA sem isso.
- */
 export function garantirContraste(cor: string, fundo = COR_FUNDO, minimo = 4.5): string {
   const rgb = hexParaRgb(cor);
   const rgbFundo = hexParaRgb(fundo);

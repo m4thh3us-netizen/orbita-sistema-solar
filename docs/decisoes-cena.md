@@ -1,4 +1,4 @@
-# Decisões da cena 3D (especialista 1)
+# Decisões da cena 3D
 
 Código em `src/scene/`, `src/camera/` e `src/assets/`. Exporta `OrbitaCanvas` e `detectarWebGL` por `src/scene/index.ts`.
 

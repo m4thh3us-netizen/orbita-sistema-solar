@@ -1,9 +1,5 @@
 import type { Fonte } from './types.ts';
 
-// Catálogo de fontes reutilizáveis. Cada astro escolhe as suas por id com `fontesPor(...)`.
-// `acessadoEm` vazio = fonte citada mas NÃO aberta na verificação; os valores que dependem
-// dela estão listados em docs/dados.md como pendentes de verificação humana.
-
 const VERIFICADO_EM = '2026-10-31';
 const NSSDCA = 'https://nssdc.gsfc.nasa.gov/planetary/factsheet';
 
@@ -12,7 +8,6 @@ function fonte(id: string, titulo: string, url: string, acessadoEm = VERIFICADO_
 }
 
 const lista = [
-  // 1. NASA NSSDCA — planetas, Lua, Plutão e Sol
   fonte('nssdca-planetas', 'Planetary Fact Sheet – Metric (NASA NSSDCA)', `${NSSDCA}/`),
   fonte('nssdca-sol', 'Sun Fact Sheet (NASA NSSDCA)', `${NSSDCA}/sunfact.html`),
   fonte('nssdca-mercurio', 'Mercury Fact Sheet (NASA NSSDCA)', `${NSSDCA}/mercuryfact.html`),
@@ -30,7 +25,6 @@ const lista = [
   fonte('nssdca-aneis-urano', 'Uranian Rings Fact Sheet (NASA NSSDCA)', `${NSSDCA}/uranringfact.html`),
   fonte('nssdca-aneis-netuno', 'Neptunian Rings Fact Sheet (NASA NSSDCA)', `${NSSDCA}/nepringfact.html`),
 
-  // 2. JPL Solar System Dynamics — satélites e planetas anões
   fonte('jpl-sats-fisicos', 'Planetary Satellite Physical Parameters (JPL SSD)', 'https://ssd.jpl.nasa.gov/sats/phys_par/'),
   fonte('jpl-sats-orbitais', 'Planetary Satellite Mean Elements (JPL SSD)', 'https://ssd.jpl.nasa.gov/sats/elem/'),
   fonte('jpl-sbdb-ceres', 'Small-Body Database: 1 Ceres (JPL SSD)', 'https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html#/?sstr=1'),
@@ -38,7 +32,6 @@ const lista = [
   fonte('jpl-sbdb-makemake', 'Small-Body Database: 136472 Makemake (JPL SSD)', 'https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html#/?sstr=136472'),
   fonte('jpl-sbdb-eris', 'Small-Body Database: 136199 Eris (JPL SSD)', 'https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html#/?sstr=136199'),
 
-  // 3. NASA Science — contagem de luas, descrições e curiosidades
   fonte('nasa-sol', 'Sun: Facts (NASA Science)', 'https://science.nasa.gov/sun/facts/'),
   fonte('nasa-luas', 'Moons (NASA Science)', 'https://science.nasa.gov/solar-system/moons/'),
   fonte('nasa-jupiter-luas', 'Jupiter Moons (NASA Science)', 'https://science.nasa.gov/jupiter/jupiter-moons/'),
@@ -61,7 +54,6 @@ const lista = [
   fonte('nasa-oberon', 'Oberon (NASA Science)', 'https://science.nasa.gov/uranus/moons/oberon/'),
   fonte('nasa-tritao', 'Triton (NASA Science)', 'https://science.nasa.gov/neptune/moons/triton/'),
 
-  // 4. Artigos e páginas de missões (quando 1–3 não cobrem o dado)
   fonte('mgs-fobos-1998', 'Mars Global Surveyor: temperaturas de Fobos medidas pelo TES (NASA, 1998)', 'https://nssdc.gsfc.nasa.gov/planetary/text/mgs_pr_19980911.txt', ''),
   fonte('ortiz-2017-haumea', 'Ortiz et al. (2017), The size, shape, density and ring of the dwarf planet Haumea from a stellar occultation, Nature 550', 'https://doi.org/10.1038/nature24051', ''),
   fonte('szakats-2023-eris', 'Szakáts et al. (2023), Tidally locked rotation of the dwarf planet (136199) Eris, A&A 669, L3', 'https://arxiv.org/abs/2211.07987', ''),
@@ -77,7 +69,6 @@ export const catalogoFontes: readonly Fonte[] = lista;
 
 const porId = new Map<string, Fonte>(lista.map((f) => [f.id, f]));
 
-/** Seleciona fontes do catálogo; ids inexistentes são erro de compilação. */
 export function fontesPor(...ids: FonteId[]): Fonte[] {
   return ids.map((id) => {
     const f = porId.get(id);

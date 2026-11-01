@@ -1,4 +1,3 @@
-/** O three.js atual exige WebGL 2; sem ele a interface mostra o fallback. */
 export function detectarWebGL(): boolean {
   try {
     if (typeof window === 'undefined' || !('WebGL2RenderingContext' in window)) return false;

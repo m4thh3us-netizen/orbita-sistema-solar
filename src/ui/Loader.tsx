@@ -3,15 +3,9 @@ import { useEffect, useState } from 'react';
 import { useInterface } from '@/state/interface';
 import './Loader.css';
 
-/** Tempo mínimo na tela: dá tempo de a cena registrar as texturas e evita um piscar. */
 const MINIMO_MS = 900;
-/** Se algo travar (textura que nunca responde), a interface não fica refém do loader. */
 const LIMITE_MS = 15000;
 
-/**
- * Loader inicial com a identidade do Órbita, ligado ao `useProgress` do Drei
- * (DefaultLoadingManager do three). Sai com fade e libera a introdução.
- */
 export function Loader() {
   const { active, progress } = useProgress();
   const setCarregado = useInterface((s) => s.setCarregado);
@@ -33,7 +27,6 @@ export function Loader() {
   useEffect(() => {
     if (!saindo) return;
     setCarregado();
-    // Remove do DOM depois do fade (com folga para --duracao-media).
     const t = window.setTimeout(() => setRemovido(true), 700);
     return () => window.clearTimeout(t);
   }, [saindo, setCarregado]);

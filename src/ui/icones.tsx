@@ -2,7 +2,6 @@ import type { ReactNode, SVGProps } from 'react';
 
 type Props = SVGProps<SVGSVGElement>;
 
-/** Ícones de traço fino (1,5px), sempre decorativos: o rótulo fica no botão. */
 function Icone({ children, ...props }: Props & { children: ReactNode }) {
   return (
     <svg

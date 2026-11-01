@@ -1,6 +1,6 @@
-# Decisões — Dados (especialista 3)
+# Decisões — Dados
 
-Decisões tomadas sem consulta, conforme as regras de colaboração. Os detalhes científicos estão em [`dados.md`](dados.md).
+Código em `src/data/`, `public/textures/` e `scripts/`. Os detalhes científicos estão em [`dados.md`](dados.md).
 
 ## Estrutura e API
 

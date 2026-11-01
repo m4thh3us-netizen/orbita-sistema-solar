@@ -1,9 +1,3 @@
-/**
- * Material padrão dos astros: MeshStandardMaterial (iluminado pela luz do Sol) com
- * relevo procedural injetado. Sem textura, a cor vem de `corBase` com variação por estilo
- * (rochoso, gasoso, gelo, vulcânico). Com textura, usa o mapa normalmente.
- * Todos os astros compartilham o mesmo programa de shader; o estilo é um uniform.
- */
 import { Color, MeshStandardMaterial, Vector4, type IUniform } from 'three';
 import type { CelestialBody } from '@/data/types';
 import type { EstiloSuperficie, TipoSuperficie } from '../estilos';

@@ -42,7 +42,6 @@ describe('RelogioSimulacao', () => {
       passos.push(r.tempoOrbital - anterior);
       anterior = r.tempoOrbital;
     }
-    // Cada passo é no máximo um pouco maior que o anterior: acelera, não salta.
     for (let i = 1; i < passos.length; i++) expect(passos[i]).toBeLessThan(passos[i - 1] + 0.03);
     expect(r.velocidadeEfetiva).toBeCloseTo(16, 2);
   });

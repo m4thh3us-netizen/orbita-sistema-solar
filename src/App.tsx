@@ -6,7 +6,6 @@ import { Loader } from '@/ui/Loader';
 
 const Fallback = lazy(() => import('@/fallback/Fallback'));
 
-/** `?sem-3d` força o modo catálogo (útil para testar o fallback num navegador com WebGL). */
 function webglDisponivel(): boolean {
   if (new URLSearchParams(window.location.search).has('sem-3d')) return false;
   try {

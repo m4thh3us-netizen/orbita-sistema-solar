@@ -1,8 +1,3 @@
-/**
- * Sol: superfície emissiva em HDR (acima do limiar do bloom), com granulação animada por
- * ruído simplex, manchas sutis e escurecimento de borda. A coroa é um quad voltado para
- * a câmera com brilho radial aditivo; ela faz o Sol "brilhar" mesmo sem bloom (qualidade baixa).
- */
 import { AdditiveBlending, Color, ShaderMaterial } from 'three';
 import { GLSL_RUIDO, GLSL_VERTICE_MUNDO } from './glsl';
 
@@ -80,7 +75,6 @@ export function criarMaterialSol(corBase: string): ShaderMaterial {
   });
 }
 
-/** `raioRelativo`: raio do disco solar dividido pela metade do lado do quad. */
 export function criarMaterialCoroa(corBase: string, raioRelativo: number): ShaderMaterial {
   return new ShaderMaterial({
     uniforms: {

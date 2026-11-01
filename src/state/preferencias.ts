@@ -11,7 +11,6 @@ export interface Preferencias {
 
 const VELOCIDADES_VALIDAS: readonly number[] = [0.25, 1, 4, 16];
 
-/** `localStorage` pode lançar (modo privado, cookies bloqueados): toda leitura passa por aqui. */
 function obterStorage(): Storage | null {
   try {
     return window.localStorage;
@@ -53,11 +52,10 @@ export function salvarPreferencias(
   try {
     storage.setItem(CHAVE_PREFERENCIAS, JSON.stringify(preferencias));
   } catch {
-    // Cota cheia ou storage bloqueado: preferências são só conveniência.
+    return;
   }
 }
 
-/** Grava órbitas, nomes e velocidade sempre que mudarem. Retorna a função de limpeza. */
 export function iniciarPersistencia(
   store: StoreApi<OrbitaState>,
   storage: Storage | null = obterStorage(),

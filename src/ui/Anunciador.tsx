@@ -4,7 +4,6 @@ import { mensagemDeMudanca } from './anuncios';
 
 const ESPACO_INSEPARAVEL = String.fromCharCode(0xa0);
 
-/** Região aria-live: "Astro selecionado: Saturno", mudanças de modo e dos controles. */
 export function Anunciador() {
   const [mensagem, setMensagem] = useState('');
 
@@ -12,7 +11,6 @@ export function Anunciador() {
     () =>
       useOrbita.subscribe((s, anterior) => {
         const nova = mensagemDeMudanca(s, anterior);
-        // Um espaço invisível alternado força o leitor a repetir mensagens idênticas.
         if (nova) setMensagem((atual) => (atual === nova ? `${nova}${ESPACO_INSEPARAVEL}` : nova));
       }),
     [],

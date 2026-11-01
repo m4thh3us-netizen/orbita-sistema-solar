@@ -1,8 +1,3 @@
-/**
- * Sol, planetas e planetas anões, sempre presentes. As luas exploráveis só são montadas
- * no sistema em foco (astro selecionado, modo luas ou lua selecionada); na visão geral
- * nenhuma lua aparece.
- */
 import { useMemo } from 'react';
 import { bodies, getBody, getChildren } from '@/data';
 import type { BodyId, CelestialBody } from '@/data/types';

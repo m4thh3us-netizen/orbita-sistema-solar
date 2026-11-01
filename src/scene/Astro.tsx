@@ -1,17 +1,3 @@
-/**
- * Um astro: segue a própria órbita, gira em torno do eixo inclinado e carrega superfície,
- * anéis, atmosfera, colisor e (como filhos) as luas.
- *
- * Hierarquia:
- *   plano (nodo + inclinação da órbita, fixo)
- *   ├─ linha da órbita
- *   └─ posição (anda na órbita; é o objeto registrado)
- *      ├─ eixo (obliquidade em torno de X)
- *      │  ├─ giro (rotação axial; luas síncronas giram com o ângulo orbital)
- *      │  └─ anéis (plano equatorial, sem girar)
- *      ├─ atmosfera, colisor, luz/coroa do Sol
- *      └─ luas (cada uma no referencial equatorial do planeta ou no da órbita)
- */
 import { useFrame } from '@react-three/fiber';
 import { useLayoutEffect, useMemo, useRef, type ReactNode } from 'react';
 import type { Group } from 'three';
@@ -36,18 +22,11 @@ const DURACAO_SURGIMENTO = 0.6;
 
 interface Props {
   corpo: CelestialBody;
-  /** Corpo em torno do qual orbita (necessário para luas). */
   pai?: CelestialBody;
-  /** Luas surgem crescendo, em vez de aparecer de uma vez. */
   surgir?: boolean;
   children?: ReactNode;
 }
 
-/**
- * Raio que a câmera precisa enquadrar: anéis, halo da atmosfera ou coroa. Os anéis contam
- * até 2,4 raios (os de Saturno inteiros); os tênues de Júpiter e Netuno vão além disso e
- * podem sair do quadro sem deixar o planeta minúsculo.
- */
 function raioVisualDe(corpo: CelestialBody, raio: number): number {
   let r = raio * 1.02;
   if (corpo.tipo === 'estrela') r = raio * 1.5;
@@ -110,7 +89,6 @@ export function Astro({ corpo, pai, surgir = false, children }: Props) {
     }
     const g = giro.current;
     if (g) {
-      // Síncrona: o meridiano 0 (u = 0,5 do mapa) fica sempre voltado para o pai.
       g.rotation.y = sincrona ? ponto.angulo + Math.PI : faseGiro + omegaGiro * relogio.tempoRotacao;
     }
   }, PRIORIDADE.corpos);

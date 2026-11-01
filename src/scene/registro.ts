@@ -1,7 +1,3 @@
-/**
- * Registro dos astros montados na cena. A câmera, os rótulos e o destaque de hover
- * consultam aqui a posição no mundo de cada astro, sem passar pelo React a cada quadro.
- */
 import type { Object3D } from 'three';
 import type { BodyId, BodyType } from '@/data/types';
 
@@ -10,12 +6,9 @@ export interface EntradaRegistro {
   nome: string;
   tipo: BodyType;
   pai: BodyId | null;
-  /** Raio da malha em unidades de cena. */
   raio: number;
-  /** Raio que precisa caber no enquadramento (inclui anéis e atmosfera). */
   raioVisual: number;
   corAcento: string;
-  /** Grupo que acompanha a órbita; a posição de mundo dele é o centro do astro. */
   objeto: Object3D;
 }
 
@@ -45,7 +38,6 @@ export const registro = {
   todos(): IterableIterator<EntradaRegistro> {
     return entradas.values();
   },
-  /** Muda a cada registro/remoção; útil para recalcular listas fora do quadro. */
   versao(): number {
     return versao;
   },

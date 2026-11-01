@@ -5,7 +5,6 @@ interface Props {
   children: ReactNode;
 }
 
-/** Se a cena 3D quebrar (driver, contexto WebGL negado), troca pelo conteúdo alternativo. */
 export class LimiteDeErro extends Component<Props, { erro: boolean }> {
   state = { erro: false };
 

@@ -9,11 +9,9 @@ export default defineConfig({
   },
   build: {
     target: 'es2022',
-    // three.js sozinho passa de 500 kB; o aviso padrão não ajuda aqui.
     chunkSizeWarningLimit: 1200,
     rolldownOptions: {
       output: {
-        // Bibliotecas 3D mudam pouco: chunk próprio aproveita o cache entre deploys.
         codeSplitting: {
           groups: [
             { name: 'three', test: /node_modules[\\/](three|three-stdlib|postprocessing)[\\/]/ },

@@ -11,14 +11,12 @@ export interface TexturasAstro {
   especular: Texture | null;
 }
 
-/** Leitura com Suspense + referência retida enquanto o componente existir. */
 function useTexturaBase(caminho: string | undefined, tipo: TipoTextura): Texture | null {
   const textura = lerTextura(caminho, tipo, 'baixa');
   useEffect(() => reter(textura), [textura]);
   return textura;
 }
 
-/** Carregamento sob demanda, sem suspender. Libera a referência ao desativar. */
 function useTexturaSobDemanda(
   caminho: string | undefined,
   tipo: TipoTextura,
@@ -41,16 +39,9 @@ function useTexturaSobDemanda(
       soltar();
     };
   }, [chave, caminho, tipo, nivel]);
-  // Desativada ou de outra chave: não usa (a referência já foi solta no cleanup).
   return chave && carregada?.chave === chave ? carregada.textura : null;
 }
 
-/**
- * Texturas da superfície de um astro (os anéis carregam as suas em <Aneis>). Suspende só
- * pelo conjunto base: mapa e nuvens em baixa resolução. Mapa em alta, normal, luzes
- * noturnas e especular chegam quando `detalhado` (astro selecionado ou pai da lua
- * selecionada) e são liberados quando deixa de ser.
- */
 export function useTexturasAstro(
   corpo: CelestialBody,
   detalhado: boolean,

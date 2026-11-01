@@ -1,5 +1,4 @@
 /**
- * Ruído simplex 3D e fBm em GLSL, com prefixo `orb_` para não colidir com os chunks do three.
  * Ruído simplex: Ian McEwan e Stefan Gustavson, Ashima Arts (licença MIT),
  * https://github.com/ashima/webgl-noise
  */
@@ -65,7 +64,6 @@ float orb_fbm(vec3 p, int oitavas) {
 }
 `;
 
-/** Vértice comum dos shaders próprios: normal e posição no mundo, posição no objeto e UV. */
 export const GLSL_VERTICE_MUNDO = /* glsl */ `
 varying vec3 vNormalW;
 varying vec3 vPosW;
@@ -81,7 +79,6 @@ void main() {
 }
 `;
 
-/** Luz da cena em GLSL: o Sol fica sempre na origem do mundo. */
 export const GLSL_LUZ = /* glsl */ `
 const float ORB_PI = 3.141592653589793;
 uniform float uLuzSol;

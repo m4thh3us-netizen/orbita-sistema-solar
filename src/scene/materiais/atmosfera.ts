@@ -1,11 +1,3 @@
-/**
- * Atmosfera por fresnel aditivo, em duas cascas:
- * - halo: casca maior renderizada pelo lado de trás; brilha logo fora do limbo e some na
- *   borda da casca (o "anel" azul da Terra visto de longe);
- * - véu: casca rente à superfície; borda brilhante e, com densidade alta (Vênus, Titã),
- *   uma névoa que cobre o disco.
- * Ambas só brilham no lado iluminado.
- */
 import { AdditiveBlending, BackSide, Color, FrontSide, ShaderMaterial, Vector3 } from 'three';
 import { GLSL_VERTICE_MUNDO } from './glsl';
 
@@ -59,12 +51,10 @@ void main() {
 
 const SOL_NA_ORIGEM = new Vector3(0, 0, 0);
 
-/** Densidade do véu sobre o disco: só atmosferas espessas (Vênus, Titã) cobrem o disco. */
 export function densidadeVeu(intensidade: number): number {
   return Math.pow(Math.min(Math.max((intensidade - 0.6) / 0.4, 0), 1), 1.5);
 }
 
-/** Espessura da casca do halo em raios do planeta, a partir da intensidade (0–1). */
 export function espessuraHalo(intensidade: number): number {
   return 1.04 + 0.08 * Math.min(Math.max(intensidade, 0), 1);
 }
@@ -86,7 +76,6 @@ export function criarMaterialHalo(cor: string, intensidade: number): ShaderMater
   });
 }
 
-/** `densidade` (0–1): 0 = só a borda; 1 = névoa opaca sobre o disco (Vênus). */
 export function criarMaterialVeu(cor: string, intensidade: number, densidade: number): ShaderMaterial {
   return new ShaderMaterial({
     uniforms: {

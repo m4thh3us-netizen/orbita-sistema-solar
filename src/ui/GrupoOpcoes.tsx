@@ -14,7 +14,6 @@ interface Props<T> {
   className?: string;
 }
 
-/** Radiogroup ARIA com tabindex móvel: Tab entra na opção marcada; setas, Home e End trocam. */
 export function GrupoOpcoes<T extends string | number>({
   rotulo,
   opcoes,

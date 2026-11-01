@@ -5,10 +5,6 @@ import { garantirContraste } from './cores';
 
 const TITULO_BASE = 'Órbita — explorador do Sistema Solar';
 
-/**
- * Reflete o store no <html>: `--cor-acento` do astro (com contraste garantido),
- * `data-movimento-reduzido` para o CSS e o título da aba.
- */
 export function iniciarAtributosDocumento(
   store: StoreApi<OrbitaState>,
   doc: Document = document,

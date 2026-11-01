@@ -23,7 +23,6 @@ export const saturno = {
     corAcento: '#DDBE6E',
     texturas: texturas('saturno', 'mapa', 'aneis'),
     atmosfera: { cor: '#EAD9B0', intensidade: 0.2 },
-    // Anéis principais: da borda interna do anel C à borda externa do anel A (NSSDCA).
     aneis: { raioInternoKm: 74_658, raioExternoKm: 136_780 },
     representacaoArtistica: false,
   },
@@ -85,8 +84,6 @@ export const saturno = {
   fontes: fontesPor('nssdca-planetas', 'nssdca-saturno', 'nssdca-aneis-saturno', 'nasa-saturno-luas'),
   atualizadoEm: '2026-10-31',
 } satisfies CelestialBody;
-
-// Luas — raio e GM: JPL SSD (phys_par); órbita: JPL SSD (elementos médios, plano de Laplace).
 
 const GM_ENCELADO = 7.21037;
 const RAIO_ENCELADO = 252.1;

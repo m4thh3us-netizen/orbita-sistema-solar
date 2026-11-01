@@ -10,23 +10,23 @@ export type Qualidade = 'alta' | 'media' | 'baixa';
 export const VELOCIDADES: readonly Velocidade[] = [0.25, 1, 4, 16];
 
 export interface OrbitaState {
-  selecionado: BodyId | null; // null = visão geral
+  selecionado: BodyId | null;
   modo: Modo;
   hover: BodyId | null;
-  transicaoEmCurso: boolean; // escrito pela cena
+  transicaoEmCurso: boolean;
   simulacaoPausada: boolean;
   velocidade: Velocidade;
   rotacaoAstroPausada: boolean;
   mostrarOrbitas: boolean;
   mostrarNomes: boolean;
-  movimentoReduzido: boolean; // escrito pela interface (prefers-reduced-motion)
-  qualidade: Qualidade; // escrito pela cena
-  ocupacaoInterface: { top: number; right: number; bottom: number; left: number }; // px cobertos por painéis; a câmera usa para enquadrar
-  resetCameraToken: number; // incrementado para pedir reset de câmera
+  movimentoReduzido: boolean;
+  qualidade: Qualidade;
+  ocupacaoInterface: { top: number; right: number; bottom: number; left: number };
+  resetCameraToken: number;
 
-  selecionar(id: BodyId): void; // modo → 'astro'
-  explorarLuas(): void; // modo → 'luas' no astro selecionado
-  voltar(): void; // lua → pai · luas → astro · astro → visão geral
+  selecionar(id: BodyId): void;
+  explorarLuas(): void;
+  voltar(): void;
   irParaVisaoGeral(): void;
   setHover(id: BodyId | null): void;
   setTransicao(v: boolean): void;
@@ -41,7 +41,6 @@ export interface OrbitaState {
   setMovimentoReduzido(v: boolean): void;
 }
 
-/** Só astros que existem nos dados e podem ser explorados em 3D entram na navegação. */
 export function podeSelecionar(id: BodyId): boolean {
   return getBody(id)?.exploravel3D === true;
 }
@@ -68,7 +67,6 @@ export function criarEstadoInicial() {
     transicaoEmCurso: false,
     simulacaoPausada: false,
     velocidade: preferencias.velocidade ?? 1,
-    // Com movimento reduzido o astro começa parado; a pessoa pode retomar pela barra.
     rotacaoAstroPausada: movimentoReduzido,
     mostrarOrbitas: preferencias.mostrarOrbitas ?? true,
     mostrarNomes: preferencias.mostrarNomes ?? true,

@@ -27,11 +27,6 @@ const idOpcao = (id: string) => `catalogo-opcao-${id}`;
 const ID_LISTA = 'catalogo-lista';
 const OPCOES_FILTRO = FILTROS.map((f) => ({ valor: f.id, rotulo: f.rotulo }));
 
-/**
- * Catálogo recolhível: busca (combobox) + filtros (radiogroup) + lista agrupada (listbox).
- * O foco fica no campo de busca; ↑/↓ movem o item ativo (aria-activedescendant),
- * Enter seleciona e Esc fecha devolvendo o foco ao botão que abriu.
- */
 export function Catalogo() {
   const aberto = useInterface((s) => s.catalogoAberto);
   const pedidoFoco = useInterface((s) => s.pedidoFocoBusca);
@@ -80,8 +75,6 @@ export function Catalogo() {
   const escolher = (id: string) => {
     selecionar(id);
     setHover(null);
-    // Em telas largas o catálogo fica aberto ao lado do painel; nas demais ele sai da frente
-    // para a cena (e a barra de controles) terem espaço.
     if (!largo) {
       fecharCatalogo();
       focarConteudo();
@@ -117,7 +110,6 @@ export function Catalogo() {
   };
 
   return (
-    // O keydown no contêiner só complementa o combobox: cada controle interno já é focável.
     // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
     <aside
       ref={ref}
@@ -207,7 +199,6 @@ export function Catalogo() {
               const indice = plano.indexOf(corpo.id);
               const atual = corpo.id === selecionado;
               return (
-                // Teclado tratado no combobox (aria-activedescendant); o clique é o atalho do mouse.
                 // eslint-disable-next-line jsx-a11y/click-events-have-key-events
                 <div
                   key={corpo.id}

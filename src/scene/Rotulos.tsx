@@ -1,11 +1,3 @@
-/**
- * Rótulos com o nome dos astros, em HTML sobre o canvas (classes `.rotulo-astro` e
- * `.rotulo-astro--hover` da interface). Um só laço por quadro posiciona todos e decide
- * quem aparece: com `mostrarNomes`, todos os visíveis; sem, só o do hover. Rótulos que se
- * sobrepõem são ocultados por prioridade (hover › estrela › planetas e luas › anões), assim
- * como os de astros grandes demais na tela (muito próximos) ou longe demais.
- * Os elementos são criados fora do React, para não haver re-render por quadro.
- */
 import { useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useRef } from 'react';
 import { Vector3, type PerspectiveCamera } from 'three';

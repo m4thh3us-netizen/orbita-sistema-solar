@@ -1,10 +1,10 @@
-# Decisões — Interface (especialista 2)
+# Decisões — Interface
 
 Código em `src/ui/`, `src/state/`, `src/fallback/`, `src/App.tsx`, `src/main.tsx` e nas configs da raiz.
 
 ## Projeto e ferramentas
 
-- **Raiz**: `projetos/` (a pasta compartilhada pelas três sessões). Os caminhos do contrato são relativos a ela.
+- **Raiz**: a raiz do repositório. Os caminhos do contrato são relativos a ela.
 - **Versões fixas** (sem `^`): React 19.3.1, R3F 9.8.2, Drei 10.7.9, @react-three/postprocessing 3.2.2, postprocessing 6.39.5, Zustand 5.0.16, Vite 8.3.5, Vitest 5.0.5.
   - **three 0.186.1**: o `postprocessing` 6.39.5 exige `three < 0.187`.
   - **TypeScript 5.9.3**: o `typescript-eslint` 8.72 aceita `< 6.1`; a 5.9 é a linha mais testada com o resto.
@@ -28,7 +28,7 @@ Código em `src/ui/`, `src/state/`, `src/fallback/`, `src/App.tsx`, `src/main.ts
 - **`rotacaoAstroPausada` começa igual a `movimentoReduzido`** (sugestão da área 1); a pessoa pode retomar pela barra.
 - **URL**:
   - Formas canônicas: `#/`, `#/saturno`, `#/saturno/luas`, `#/saturno/tita`. `#/tita` é aceito e reescrito para `#/saturno/tita` com `replaceState`.
-  - Qualquer parte inválida (ID desconhecido, lua com o pai errado, `luas` sem luas exploráveis, caminho longo demais, `%` malformado) volta para `#/`, como pede o prompt, em vez de parar no nível válido mais fundo.
+  - Qualquer parte inválida (ID desconhecido, lua com o pai errado, `luas` sem luas exploráveis, caminho longo demais, `%` malformado) volta para `#/`, em vez de parar no nível válido mais fundo.
   - Estado → URL com `pushState`: cada navegação vira uma entrada do histórico, então o voltar do navegador percorre o caminho real. `''`, `#` e `#/` são equivalentes, para a primeira visita não sujar a URL.
   - As sincronizações começam em `main.tsx`, antes do primeiro render: um link direto já abre no astro, sem passar pela visão geral.
   - Links da interface (trilha, luas, cartões do fallback) são `<a href="#/...">` de verdade, para copiar e abrir em nova aba. "Pular para o conteúdo" usa `preventDefault`, para não virar rota.
