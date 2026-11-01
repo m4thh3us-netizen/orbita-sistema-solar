@@ -6,6 +6,22 @@ Projeto desenvolvido por Matheus Lopes com ajuda de IA (Claude Code).
 
 **Demonstração:** ainda não há versão publicada. Para rodar localmente, veja [Como executar](#como-executar).
 
+![Visão geral do Sistema Solar no Órbita, com as órbitas e os nomes dos astros](docs/imagens/visao-geral.webp)
+
+## Imagens
+
+| Planeta selecionado                                                  | Exploração das luas                                                                    |
+| -------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| ![Saturno com o painel de informações](docs/imagens/saturno.webp)    | ![Júpiter no modo luas, com as quatro luas galileanas](docs/imagens/luas-jupiter.webp) |
+| **Lua selecionada**                                                  | **Catálogo com busca sem acentos**                                                     |
+| ![Titã, lua de Saturno, com a ficha técnica](docs/imagens/tita.webp) | ![Catálogo encontrando Titã e Titânia pela busca "tita"](docs/imagens/catalogo.webp)   |
+
+<p align="center">
+  <img src="docs/imagens/celular.webp" alt="Saturno no celular, com o painel em bottom sheet" width="260">
+  &nbsp;
+  <img src="docs/imagens/celular-luas.webp" alt="Luas de Júpiter no celular" width="260">
+</p>
+
 ## Funcionalidades
 
 - **Cena 3D** com Sol, planetas, planetas anões, luas, cinturão de asteroides, cinturão de Kuiper e campo de estrelas com parallax.
@@ -118,7 +134,7 @@ src/
   fallback/        modo catálogo sem WebGL
 scripts/           geração das texturas
 public/textures/   texturas em WebP (2K e 1K)
-docs/              decisões técnicas e documentação dos dados
+docs/              decisões técnicas, documentação dos dados e imagens do README
 ```
 
 A cena e a interface não se chamam diretamente: as duas leem e escrevem no mesmo store (`src/state/store.ts`) e leem os astros por `src/data/index.ts`. A URL é sincronizada com o store nos dois sentidos.
